@@ -1,0 +1,144 @@
+# ----- Importo las librerías necesarias ----- #
+import os
+from PySide6.QtGui import *
+from PySide6.QtWidgets import *
+from PySide6.QtCore import *
+        
+class MenuView(QWidget):
+    volver_menu = Signal()
+    crear_usuario = Signal()
+    
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._build_ui()
+        
+    def _build_ui(self):
+        # ----- Creo el widget principal ----- #
+        frame = QWidget()
+        root_layout = QVBoxLayout(frame)
+
+        # ----- Creo el widget principal ----- #
+        self.frame_titulo_admin = QFrame()
+        self.frame_opciones_admin = QFrame()
+        
+        # ----- Le agrego espacio para cada frame ----- #
+        root_layout.addWidget(self.frame_titulo_admin, stretch=1)
+        root_layout.addWidget(self.frame_opciones_admin, stretch=3)
+        self.frame_opciones_admin.setStyleSheet("QFrame { background-color: transparent; }")
+        
+        # ----- Creo el título y le asigno un nombre para el estilo ----- #
+        titulo = QLabel("🍔LA BURGUESIA🍔")
+        titulo.setObjectName("titulo")
+        titulo.setAlignment(Qt.AlignCenter)
+        
+        # ----- Creo el subtitulo y le asigno un nombre para el estilo ----- #
+        subtitulo = QLabel("¡Administrador!")
+        subtitulo.setObjectName("subtitulo")
+        subtitulo.setAlignment(Qt.AlignCenter)
+        subtitulo.setContentsMargins(0, 0, 0, 10)
+        
+        # ----- Añado todo al layout ----- #
+        titulo_layout = QVBoxLayout()
+        titulo_layout.addWidget(titulo)
+        titulo_layout.addWidget(subtitulo)
+        self.frame_titulo_admin.setLayout(titulo_layout)
+        
+        # ----- Llamo los botones del admin ----- #
+        self._setup_buttons_layout()
+    
+    def _setup_buttons_layout(self):
+        # ----- Seteo el layout del frame del inicio ----- #
+        self.frame_botones_administrador = QVBoxLayout(self.frame_opciones_admin)
+
+        # ----- Creo un grupo para la parte de usuarios ----- #
+        grupo_usuarios = QGroupBox("Usuarios")
+        layout_usuarios = QGridLayout()
+        layout_usuarios.setContentsMargins(10, 25, 10, 10)
+
+        # ----- Creo el botón para crear usuarios, agregando su icono y su estilo  ----- #
+        self.crear = QPushButton("Crear usuario")
+        crear_icon = os.path.dirname(__file__)
+        self.crear.setIcon(QIcon(os.path.join(crear_icon, "icons/nuevo usuario.png")))
+        self.crear.setIconSize(QSize(23, 23))
+        self.crear.setObjectName("id2")
+        self.crear.setFixedWidth(180)
+        
+        # ----- Creo el botón para modificar usuarios, agregando su icono y su estilo ----- #
+        self.modificar = QPushButton("Modificar usuario")
+        modificar_icon = os.path.dirname(__file__)
+        self.modificar.setIcon(QIcon(os.path.join(modificar_icon, "icons/editar usuario.png")))
+        self.modificar.setIconSize(QSize(23, 23))
+        self.modificar.setObjectName("id5")
+        self.modificar.setFixedWidth(180)
+        
+        # ----- Creo el botón para eliminar usuarios, agregando su icono y su estilo ----- #
+        self.eliminar = QPushButton("Eliminar usuario")
+        eliminar_icon = os.path.dirname(__file__)
+        self.eliminar.setIcon(QIcon(os.path.join(eliminar_icon, "icons/eliminar usuario.png")))
+        self.eliminar.setIconSize(QSize(23, 23))
+        self.eliminar.setFixedWidth(180)
+        
+        # ----- Creo el botón para modificar al administrador, agregando su icono y su estilo ----- #
+        self.editar_admin = QPushButton("Modificar Admin")
+        editar_admin_icon = os.path.dirname(__file__)
+        self.editar_admin.setIcon(QIcon(os.path.join(editar_admin_icon, "icons/modificar admin.png")))
+        self.editar_admin.setIconSize(QSize(23, 23))
+        self.editar_admin.setObjectName("id5")
+        self.editar_admin.setFixedWidth(180)
+        
+        # ----- Agrego los botones para los usuarios en sus correspondientes posiciones ----- #
+        layout_usuarios.addWidget(self.crear, 0, 0, alignment=Qt.AlignCenter)
+        layout_usuarios.addWidget(self.modificar, 1, 0, alignment=Qt.AlignCenter)
+        layout_usuarios.addWidget(self.eliminar, 0, 1, alignment=Qt.AlignCenter)
+        layout_usuarios.addWidget(self.editar_admin, 1, 1, alignment=Qt.AlignCenter)
+        layout_usuarios.setVerticalSpacing(10)
+        
+        # ----- Seteo el grupo de los usuarios ----- #
+        grupo_usuarios.setLayout(layout_usuarios)
+        
+        # ----- Creo un grupo para el sistema de la app ----- #
+        grupo_sistema = QGroupBox("Sistema")
+        layout_sistema = QGridLayout()
+        layout_sistema.setContentsMargins(10, 25, 10, 10)
+        
+        # ----- Creo el botón para ver los registros, agregando su icono y su estilo ----- #
+        self.registros = QPushButton("Ver registros")
+        registros_icon = os.path.dirname(__file__)
+        self.registros.setIcon(QIcon(os.path.join(registros_icon, "icons/registros.png")))
+        self.registros.setIconSize(QSize(23, 23))
+        self.registros.setObjectName("id4")
+        self.registros.setFixedWidth(180)
+        
+        # ----- Creo el botón para el respaldo de la app, agregando su icono y su estilo ----- #
+        self.respaldo = QPushButton("Respaldo")
+        respaldo_icon = os.path.dirname(__file__)
+        self.respaldo.setIcon(QIcon(os.path.join(respaldo_icon, "icons/backup.png")))
+        self.respaldo.setIconSize(QSize(23, 23))
+        self.respaldo.setObjectName("id6")
+        self.respaldo.setFixedWidth(180)
+        
+        # ----- Creo el botón para volver al login principal, agregando su icono y su estilo ----- #
+        self.volver = QPushButton("Volver al menú")
+        volver_icon = os.path.dirname(__file__)
+        self.volver.setIcon(QIcon(os.path.join(volver_icon, "icons/retroceder.png")))
+        self.volver.setIconSize(QSize(23, 23))
+        self.volver.setObjectName("id3")
+        self.volver.setFixedWidth(180)
+        
+        # ----- Agrego los botones del sistema en sus correspondientes posiciones ----- #
+        layout_sistema.addWidget(self.registros, 0, 0, alignment=Qt.AlignCenter)
+        layout_sistema.addWidget(self.respaldo, 0, 1, alignment=Qt.AlignCenter)
+        layout_sistema.addWidget(self.volver, 1, 0, 1, 2,alignment=Qt.AlignCenter)
+        layout_sistema.setVerticalSpacing(15)
+        
+        # ----- Seteo el grupo para el sistema ----- #
+        grupo_sistema.setLayout(layout_sistema)
+        
+        # ----- Agrego ambos grupos al frame del administrador ----- #
+        self.frame_botones_administrador.addWidget(grupo_usuarios)
+        self.frame_botones_administrador.addWidget(grupo_sistema)
+        self.frame_botones_administrador.addStretch()
+        
+        # ----- Seteo el grupo de los usuarios ----- #
+        self.volver.clicked.connect(self.volver_menu.emit)
