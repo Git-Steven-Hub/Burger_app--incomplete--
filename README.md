@@ -6,4 +6,5 @@ The function of this app is drive all archives, orders, users, etc of a burger l
 
 I made a simple use for all people, everyone can understand the function of every button.
 
-For his use in this moment you need install PySide6.
+> [!TIP]
+> For his use in this moment you need install PySide6.
