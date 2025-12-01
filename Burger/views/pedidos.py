@@ -5,9 +5,8 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
         
 class PedidosView(QWidget):
-    order_form = ""
     retroceder = Signal()
-    confirmar_pedido = Signal() 
+    confirmar_pedido = Signal()
     
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -15,8 +14,7 @@ class PedidosView(QWidget):
     
     def _build_ui(self):
         # ----- Creo el layout vertical ----- #
-        frame = QWidget()
-        root_layout = QVBoxLayout(frame)
+        root_layout = QVBoxLayout(self)
         
         # ----- Creo los frames para cada opción ----- #
         self.frame_titulo = QFrame()
@@ -128,22 +126,22 @@ class PedidosView(QWidget):
         grid.addWidget(self.postre_flan, 5, 1)
 
         # ----- Creo el botón para volver al menu ----- #
-        self.boton_atras = QPushButton("Retroceder")
+        self.btn_atras = QPushButton("Retroceder")
         boton_atras_icon = os.path.dirname(__file__)
-        self.boton_atras.setIcon(QIcon(os.path.join(boton_atras_icon, "icons/retroceder.png")))
-        self.boton_atras.setIconSize(QSize(25, 25))
+        self.btn_atras.setIcon(QIcon(os.path.join(boton_atras_icon, "icons/retroceder.png")))
+        self.btn_atras.setIconSize(QSize(25, 25))
         
         # ----- Creo el botón para confirmar el pedido ----- #
-        self.boton_confirmar = QPushButton("Confirmar")
+        self.btn_confirmar = QPushButton("Confirmar")
         boton_confirmar_icon = os.path.dirname(__file__)
-        self.boton_confirmar.setIcon(QIcon(os.path.join(boton_confirmar_icon, "icons/aceptar.png")))
-        self.boton_confirmar.setIconSize(QSize(25, 25))
-        self.boton_confirmar.setObjectName("id1")
+        self.btn_confirmar.setIcon(QIcon(os.path.join(boton_confirmar_icon, "icons/aceptar.png")))
+        self.btn_confirmar.setIconSize(QSize(25, 25))
+        self.btn_confirmar.setObjectName("id1")
 
         # ----- Les doy espacio verticalos a los botones y los agrego ----- #
         botones_layout = QHBoxLayout()
-        botones_layout.addWidget(self.boton_atras)
-        botones_layout.addWidget(self.boton_confirmar)
+        botones_layout.addWidget(self.btn_atras)
+        botones_layout.addWidget(self.btn_confirmar)
 
         # ----- Agrego todo al layout principal ----- #
         self.frame_opciones_layout.addLayout(grid)
@@ -156,4 +154,8 @@ class PedidosView(QWidget):
         self.combo_simple.returnPressed.connect(lambda: self.combo_doble.setFocus())
         self.combo_doble.returnPressed.connect(lambda: self.combo_triple.setFocus())
         self.combo_triple.returnPressed.connect(lambda: self.postre_flan.setFocus())
-        self.postre_flan.returnPressed.connect(self.boton_confirmar.click)
+        self.postre_flan.returnPressed.connect(self.btn_confirmar.click)
+
+        # conectar botones a las señales públicas
+        self.btn_atras.clicked.connect(self.retroceder.emit)
+        self.btn_confirmar.clicked.connect(self.confirmar_pedido.emit)

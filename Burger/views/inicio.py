@@ -1,10 +1,8 @@
 import os
-from PySide6.QtCore import QLocale, QPoint, QRect, QSize, Qt
-from PySide6.QtGui import QCursor, QFont, QIcon, QPalette, QRegion
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
-from PySide6.QtWidgets import QSizePolicy, QWidget
+
 
 class InicioView(QWidget):
     ir_admin = Signal()
@@ -17,7 +15,6 @@ class InicioView(QWidget):
     
     def _build_ui(self):
         # ----- Creo el widget principal ----- #
-        self.frame = QWidget()
         root_layout = QVBoxLayout(self)
         
         # ----- Creo los frames para cada opción ----- #
@@ -47,12 +44,12 @@ class InicioView(QWidget):
         self.frame_bienvenida.setLayout(titulo_layout)
         
         # ----- Creo el efecto de opacidad ----- #
-        efecto = QGraphicsOpacityEffect(self.frame)
-        frame.setGraphicsEffect(self.efecto)
+        efecto = QGraphicsOpacityEffect(self)
+        self.setGraphicsEffect(efecto)
         efecto.setOpacity(0.0)
         
         # ----- Creo la animación ----- #
-        animacion = QPropertyAnimation(self.efecto, b"opacity")
+        animacion = QPropertyAnimation(efecto, b"opacity")
         animacion.setDuration(700)
         animacion.setStartValue(0.0)
         animacion.setEndValue(1.0)
@@ -63,53 +60,53 @@ class InicioView(QWidget):
         self._anim = animacion
         
         # ----- Llamo a los botones mostrando el frame ----- #
-        self._setup_buttones_layout()
+        self._setup_buttons_layout()
         
     def _setup_buttons_layout(self):
                 # ----- Seteo el layout del frame del inicio ----- #
         self.frame_inicio_layout = QVBoxLayout(self.frame_inicio)
         
         # ----- Creo el botón de inicio y le asigno nombre ----- #
-        self.sesion = QPushButton("Iniciar sesión")
+        self.btn_sesion = QPushButton("Iniciar sesión")
         sesion_icon = os.path.dirname(__file__)
-        self.sesion.setIcon(QIcon(os.path.join(sesion_icon, "resources/icons/login.png")))
-        self.sesion.setIconSize(QSize(25, 25))
-        self.sesion.setObjectName("id1")
-        self.sesion.setFixedWidth(380)
+        self.btn_sesion.setIcon(QIcon(os.path.join(sesion_icon, "resources/icons/login.png")))
+        self.btn_sesion.setIconSize(QSize(25, 25))
+        self.btn_sesion.setObjectName("id1")
+        self.btn_sesion.setFixedWidth(380)
         
         # ----- Creo el botón de usuario nuevo y le asigno nombre----- #
-        self.usuario_nuevo = QPushButton("Nuevo usuario")
+        self.btn_usuario_nuevo = QPushButton("Nuevo usuario")
         nuevo_usuario_icon = os.path.dirname(__file__)
-        self.usuario_nuevo.setIcon(QIcon(os.path.join(nuevo_usuario_icon, "resources/icons/nuevo usuario.png")))
-        self.usuario_nuevo.setIconSize(QSize(25, 25))
-        self.usuario_nuevo.setObjectName("id2")
-        self.usuario_nuevo.setFixedWidth(380)
+        self.btn_usuario_nuevo.setIcon(QIcon(os.path.join(nuevo_usuario_icon, "resources/icons/nuevo usuario.png")))
+        self.btn_usuario_nuevo.setIconSize(QSize(25, 25))
+        self.btn_usuario_nuevo.setObjectName("id2")
+        self.btn_usuario_nuevo.setFixedWidth(380)
         
         # ----- Creo el botón para el administrador ----- #
-        self.administrador = QPushButton("Administrador")
+        self.btn_administrador = QPushButton("Administrador")
         admin_icon = os.path.dirname(__file__)
-        self.administrador.setIcon(QIcon(os.path.join(admin_icon, "resources/icons/admin.png")))
-        self.administrador.setIconSize(QSize(25, 25))
-        self.administrador.setObjectName("boton_admin")
+        self.btn_administrador.setIcon(QIcon(os.path.join(admin_icon, "resources/icons/admin.png")))
+        self.btn_administrador.setIconSize(QSize(25, 25))
+        self.btn_administrador.setObjectName("boton_admin")
         # ----- Creo el botón de salir y le asigno nombre ----- #
-        self.salir = QPushButton("Salir")
+        self.btn_salir = QPushButton("Salir")
         salir_icon = os.path.dirname(__file__)
-        self.salir.setIcon(QIcon(os.path.join(salir_icon, "resources/icons/cerrar app.png")))
-        self.salir.setIconSize(QSize(25, 25))
-        self.salir.setObjectName("id3")
+        self.btn_salir.setIcon(QIcon(os.path.join(salir_icon, "resources/icons/cerrar app.png")))
+        self.btn_salir.setIconSize(QSize(25, 25))
+        self.btn_salir.setObjectName("id3")
         
         # ----- Creo los QLineEdit para el inicio de sesión ----- #
         self.usuario = QLineEdit()
         self.usuario.setPlaceholderText("Usuario")
-        self.contraseña = QLineEdit()
-        self.contraseña.setPlaceholderText("Contraseña")
-        self.contraseña.setEchoMode(QLineEdit.Password)
+        self.contrasena = QLineEdit()
+        self.contrasena.setPlaceholderText("Contraseña")
+        self.contrasena.setEchoMode(QLineEdit.Password)
         
         # ----- Creo los QLineEdit para el nuevo usuario ----- #
         self.nuevo_usuario = QLineEdit()
         self.nuevo_usuario.setPlaceholderText("Crear usuario")
-        self.nueva_contraseña = QLineEdit()
-        self.nueva_contraseña.setPlaceholderText("Crear contraseña")
+        self.nueva_contrasena = QLineEdit()
+        self.nueva_contrasena.setPlaceholderText("Crear contraseña")
         
         # ----- Creo el layout para las columnas ----- #
         columnas = QGridLayout()
@@ -121,25 +118,25 @@ class InicioView(QWidget):
         columnas2.setAlignment(Qt.AlignCenter)
 
         # ----- Agrego los botones al layout ----- #
-        columnas2.addWidget(self.administrador)
-        columnas2.addWidget(self.salir)
+        columnas2.addWidget(self.btn_administrador)
+        columnas2.addWidget(self.btn_salir)
         
         # ----- Pongo cada botón dándole tamaño con su respectivo QlineEdit en sus columnas ----- #
-        columnas.addWidget(self.sesion, 0, 1, alignment=Qt.AlignCenter)
+        columnas.addWidget(self.btn_sesion, 0, 1, alignment=Qt.AlignCenter)
         columnas.addWidget(self.usuario, 1, 1, alignment=Qt.AlignCenter)
         self.usuario.setFixedWidth(350)
         # ----- Separación ----- #
-        columnas.addWidget(self.contraseña, 2, 1, alignment=Qt.AlignCenter)
-        self.contraseña.setFixedWidth(350)
-        self.contraseña.setContentsMargins(0, 0, 0, 5)
+        columnas.addWidget(self.contrasena, 2, 1, alignment=Qt.AlignCenter)
+        self.contrasena.setFixedWidth(350)
+        self.contrasena.setContentsMargins(0, 0, 0, 5)
         # ----- Separación ----- #
-        columnas.addWidget(self.usuario_nuevo, 3, 1, alignment=Qt.AlignCenter)
+        columnas.addWidget(self.btn_usuario_nuevo, 3, 1, alignment=Qt.AlignCenter)
         columnas.addWidget(self.nuevo_usuario, 4, 1, alignment=Qt.AlignCenter)
         self.nuevo_usuario.setFixedWidth(350)
         # ----- Separación ----- #
-        columnas.addWidget(self.nueva_contraseña, 5, 1, alignment=Qt.AlignCenter)
-        self.nueva_contraseña.setFixedWidth(350)
-        self.nueva_contraseña.setContentsMargins(0, 0, 0, 5)
+        columnas.addWidget(self.nueva_contrasena, 5, 1, alignment=Qt.AlignCenter)
+        self.nueva_contrasena.setFixedWidth(350)
+        self.nueva_contrasena.setContentsMargins(0, 0, 0, 5)
         
         # ----- Agrego los botones al frame ----- #
         columnas.addLayout(columnas2, 7, 0, 1, 3)

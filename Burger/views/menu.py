@@ -14,8 +14,7 @@ class MenuView(QWidget):
     
     def _build_ui(self):
         # ----- Creo el widget principal ----- #
-        frame = QWidget()
-        root_layout = QVBoxLayout(frame)
+        root_layout = QVBoxLayout(self)
         
         # ----- Creo el widget principal ----- #
         self.frame_titulo_menu = QFrame()
@@ -49,46 +48,61 @@ class MenuView(QWidget):
         # ----- Seteo el layout del frame del inicio ----- #
         self.frame_botones_menu = QVBoxLayout(self.frame_opciones_menu)
         
-        self.iniciar_pedido = QPushButton("Iniciar pedido")
+        # ----- Creo el botón para iniciar el pedido, colocando su icono y estilo ----- #
+        self.btn_iniciar_pedido = QPushButton("Iniciar pedido")
         pedido_icon = os.path.dirname(__file__)
-        self.iniciar_pedido.setIcon(QIcon(os.path.join(pedido_icon, "icons/combo.png")))
-        self.iniciar_pedido.setIconSize(QSize(25, 25))    
-        self.iniciar_pedido.setObjectName("id1")
-        self.iniciar_pedido.setFixedWidth(380)
+        self.btn_iniciar_pedido.setIcon(QIcon(os.path.join(pedido_icon, "icons/combo.png")))
+        self.btn_iniciar_pedido.setIconSize(QSize(25, 25))    
+        self.btn_iniciar_pedido.setObjectName("id1")
+        self.btn_iniciar_pedido.setFixedWidth(380)
         
-        self.estado_turno = QPushButton("Ver resumen del día")
+        # ----- Creo el botón para ver el resumen del día, colocando su icono y estilo----- #
+        self.btn_estado_turno = QPushButton("Ver resumen del día")
         resumen_icon = os.path.dirname(__file__)
-        self.estado_turno.setIcon(QIcon(os.path.join(resumen_icon, "icons/resumen.png")))
-        self.estado_turno.setIconSize(QSize(25, 25))        
-        self.estado_turno.setObjectName("id4")
-        self.estado_turno.setFixedWidth(380)
+        self.btn_estado_turno.setIcon(QIcon(os.path.join(resumen_icon, "icons/resumen.png")))
+        self.btn_estado_turno.setIconSize(QSize(25, 25))        
+        self.btn_estado_turno.setObjectName("id4")
+        self.btn_estado_turno.setFixedWidth(380)
         
-        self.historial_turno = QPushButton("Ver tu historial de turnos")
+        # ----- Creo el botón para ver el historial completo, colocando su icono y estilo ----- #
+        self.btn_historial_turno = QPushButton("Ver tu historial de turnos")
         turnos_icon = os.path.dirname(__file__)
-        self.historial_turno.setIcon(QIcon(os.path.join(turnos_icon, "icons/turnos.png")))
-        self.historial_turno.setIconSize(QSize(25, 25))
-        self.historial_turno.setFixedWidth(380)
+        self.btn_historial_turno.setIcon(QIcon(os.path.join(turnos_icon, "icons/turnos.png")))
+        self.btn_historial_turno.setIconSize(QSize(25, 25))
+        self.btn_historial_turno.setFixedWidth(380)
         
-        self.cambiar_contraseña = QPushButton("Cambiar contraseña")
-        cambiar_contraseña_icon = os.path.dirname(__file__)
-        self.cambiar_contraseña.setIcon(QIcon(os.path.join(cambiar_contraseña_icon, "icons/password.png")))
-        self.cambiar_contraseña.setIconSize(QSize(25, 25))
-        self.cambiar_contraseña.setObjectName("id5")
-        self.cambiar_contraseña.setFixedWidth(380)
+        # ----- Creo el botón para cambiar la propia contraseña, colocando su icono y estilo ----- #
+        self.btn_cambiar_contrasena = QPushButton("Cambiar contraseña")
+        cambiar_contrasena_icon = os.path.dirname(__file__)
+        self.btn_cambiar_contrasena.setIcon(QIcon(os.path.join(cambiar_contrasena_icon, "icons/password.png")))
+        self.btn_cambiar_contrasena.setIconSize(QSize(25, 25))
+        self.btn_cambiar_contrasena.setObjectName("id5")
+        self.btn_cambiar_contrasena.setFixedWidth(380)
         
-        self.terminar_turno = QPushButton("Cerrar turno")
+        # ----- Creo el botón para cerrar el turno, colocando su icono y estilo ----- #
+        self.btn_terminar_turno = QPushButton("Cerrar turno")
         terminar_turno_icon = os.path.dirname(__file__)
-        self.terminar_turno.setIcon(QIcon(os.path.join(terminar_turno_icon, "icons/salir.png")))
-        self.terminar_turno.setIconSize(QSize(25, 25))
-        self.terminar_turno.setObjectName("id3")
-        self.terminar_turno.setFixedWidth(380)
+        self.btn_terminar_turno.setIcon(QIcon(os.path.join(terminar_turno_icon, "icons/salir.png")))
+        self.btn_terminar_turno.setIconSize(QSize(25, 25))
+        self.btn_terminar_turno.setObjectName("id3")
+        self.btn_terminar_turno.setFixedWidth(380)
 
+        # ----- Creo el layout para las columnas ----- #
         columnas = QGridLayout()
         
-        columnas.addWidget(self.iniciar_pedido, 0, 0, alignment=Qt.AlignCenter)
-        columnas.addWidget(self.estado_turno, 1, 0, alignment=Qt.AlignCenter)
-        columnas.addWidget(self.historial_turno, 2, 0, alignment=Qt.AlignCenter)
-        columnas.addWidget(self.cambiar_contraseña, 3, 0, alignment=Qt.AlignCenter)
-        columnas.addWidget(self.terminar_turno, 4, 0, alignment=Qt.AlignCenter)
+        # ----- Agrego los botones en su posición correspondiente ----- #
+        columnas.addWidget(self.btn_iniciar_pedido, 0, 0, alignment=Qt.AlignCenter)
+        # ----- Separación ----- #
+        columnas.addWidget(self.btn_estado_turno, 1, 0, alignment=Qt.AlignCenter)
+        # ----- Separación ----- #
+        columnas.addWidget(self.btn_historial_turno, 2, 0, alignment=Qt.AlignCenter)
+        # ----- Separación ----- #
+        columnas.addWidget(self.btn_cambiar_contrasena, 3, 0, alignment=Qt.AlignCenter)
+        # ----- Separación ----- #
+        columnas.addWidget(self.btn_terminar_turno, 4, 0, alignment=Qt.AlignCenter)
         
+        # ----- Agrego todo al layout principal ---- #
         self.frame_botones_menu.addLayout(columnas)
+
+        # conectar la señal pública a la acción del botón
+        self.btn_iniciar_pedido.clicked.connect(self.iniciar_pedido.emit)

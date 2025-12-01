@@ -1,8 +1,10 @@
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
-from Burger_UI import *
-from Burger_System import *
+from Burger.views import InicioView, AdminView, MenuView, PedidosView
 import re
+
+# Nota: no importamos UI ni Sistema aquí para evitar dependencias cíclicas.
+# `ControladorMain` recibe las instancias `ui` y `sistema` desde `Main.py`.
 
 class ControladorMain:
     def __init__(self, ui, sistema):
@@ -14,24 +16,34 @@ class ControladorMain:
     def conectar_acciones(self):
         vista = self.ui
         #------ login ------#
-        vista.salir.clicked.connect(self.cerrar_aplicacion)
-        vista.sesion.clicked.connect(lambda: self.cambiar_frame(vista.stack.currentWidget(), vista.menu))
+        vista.btn_salir.clicked.connect(self.cerrar_aplicacion)
+        vista.btn_sesion.clicked.connect(lambda: self.cambiar_frame(vista.stack.currentWidget(), vista.menu))
         
         # vista.usuario_nuevo.clicked.connect()
         
-        vista.administrador.clicked.connect(vista.confirmacion_admin)
+        vista.btn_administrador.clicked.connect(vista.confirmacion_admin)
         #------ admin ------#
-        vista.volver.clicked.connect(lambda: self.cambiar_frame(vista.stack.currentWidget(), vista.inicio))
+        vista.btn_volver.clicked.connect(lambda: self.cambiar_frame(vista.stack.currentWidget(), vista.inicio))
         #------ encargados ------#
-        vista.iniciar_pedido.clicked.connect(lambda: self.cambiar_frame(vista.stack.currentWidget(), vista.pedidos))
-        vista.terminar_turno.clicked.connect(vista.acciones_menu)
+        vista.btn_iniciar_pedido.clicked.connect(lambda: self.cambiar_frame(vista.stack.currentWidget(), vista.pedidos))
+        vista.btn_terminar_turno.clicked.connect(vista.acciones_menu)
         #------ pedidos ------#
-        vista.boton_atras.clicked.connect(lambda: (self.cambiar_frame(vista.stack.currentWidget(), vista.menu), 
+        vista.btn_atras.clicked.connect(lambda: (self.cambiar_frame(vista.stack.currentWidget(), vista.menu), 
                                                    vista.limpiar_campos() if hasattr(vista, "limpiar_campos") else None
                                                 ))
-        vista.boton_confirmar.clicked.connect(vista.setup_resumen)
-        vista.boton_confirmar.clicked.connect(self.tomar_pedido)
+        vista.btn_confirmar.clicked.connect(vista.setup_resumen)
+        vista.btn_confirmar.clicked.connect(self.tomar_pedido)
         
+    def cerrar_aplicacion(self):
+        try:
+            self.sistema.apagar_sistema()
+        except:
+            pass
+        self.ui.close()
+    
+    def cambiar_frame(self, frame_actual, frame_siguiente):
+        self.ui.ir_frame(frame_actual, frame_siguiente)
+""""      
     def tomar_pedido(self, datos):
         if len(datos["Cliente"]) < 3:
             return {"Error" : "El nombre del cliente no es válido."}
@@ -62,14 +74,4 @@ class ControladorMain:
         if resultado["Bien"]:
             self.ui.setup_resumen(self.total)
         
-        
-        
-    def cerrar_aplicacion(self):
-        try:
-            self.sistema.apagar_sistema()
-        except:
-            pass
-        self.ui.close()
-    
-    def cambiar_frame(self, frame_actual, frame_siguiente):
-        self.ui.ir_frame(frame_actual, frame_siguiente)
+"""        

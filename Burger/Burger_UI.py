@@ -1,11 +1,12 @@
+"""
 # Importo las librerías necesarias
 import os, sys, warnings, re, ctypes
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
-from Styles import *
-from Burger_System import Sistema
-
+from Burger.views import InicioView, AdminView, MenuView, PedidosView
+from Burger.styles.Styles import estilos_boton
+from Burger.services.Burger_System import Sistema
 
 class Burger(QMainWindow):
     def __init__(self):
@@ -26,19 +27,19 @@ class Burger(QMainWindow):
         self.setCentralWidget(self.stack)       
         
         # ----- Index 0 ----- #
-        self.inicio = self.setup_inicio()
+        self.inicio = InicioView()
         self.stack.addWidget(self.inicio)
         
         # ----- Index 1 ----- #
-        self.admin = self.setup_admin()
+        self.admin = AdminView()
         self.stack.addWidget(self.admin)
         
         # ----- Index 2 ----- #
-        self.menu = self.setup_menu()
+        self.menu = MenuView()
         self.stack.addWidget(self.menu)
 
         # ----- Index 3 ----- #
-        self.pedidos = self.setup_pedidos()
+        self.pedidos = PedidosView()
         self.stack.addWidget(self.pedidos)
         
         # ----- Esto es para que la app tenga icono en la barra de tareas, depués se lo saco ----- #
@@ -749,3 +750,5 @@ class Burger(QMainWindow):
         monto_entregado = QLineEdit()
         
         monto_entregado.setValidator(validador)
+        
+"""
