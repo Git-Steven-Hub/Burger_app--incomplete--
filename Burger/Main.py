@@ -6,22 +6,21 @@ from PySide6.QtCore import QTranslator, QLocale, QLibraryInfo
 
 # Usar imports explícitos del paquete `Burger`.
 # Recomendado: ejecutar con `python -m Burger.Main` desde el directorio padre.
-from Burger.views import InicioView, AdminView, MenuView, PedidosView
+from Burger.Burger_UI import Burger
 from Burger.styles.Styles import estilos_boton
 from Burger.services.Burger_System import Sistema
 from Burger.services.Burger_Controller import ControladorMain
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), "icons/icono.png")))
     
     burger_sistema = Sistema()
     burger_sistema.connect()
     
-    burger_ui = InicioView()
+    burger_ui = Burger()
     controlador = ControladorMain(burger_ui, burger_sistema)
     
-    app.setStyleSheet(estilos_boton)
+    
     burger_ui.show()
     
     warnings.filterwarnings("ignore", category=DeprecationWarning)

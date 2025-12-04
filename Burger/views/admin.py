@@ -13,17 +13,18 @@ class AdminView(QWidget):
         self._build_ui()
         
     def _build_ui(self):
-        # ----- Creo el widget principal ----- #
         root_layout = QVBoxLayout(self)
-
-        # ----- Creo el widget principal ----- #
-        self.frame_titulo_admin = QFrame()
-        self.frame_opciones_admin = QFrame()
         
-        # ----- Le agrego espacio para cada frame ----- #
-        root_layout.addWidget(self.frame_titulo_admin, stretch=1)
-        root_layout.addWidget(self.frame_opciones_admin, stretch=3)
-        self.frame_opciones_admin.setStyleSheet("QFrame { background-color: transparent; }")
+        self.frame_titulo = QFrame()
+        self.frame_opciones = QFrame()
+    
+        self.frame_titulo.setObjectName("frame_decorado")
+        self.frame_opciones.setStyleSheet("QFrame {background-color: transparent;}")
+        
+        root_layout.addWidget(self.frame_titulo, stretch=1)
+        
+        root_layout.addWidget(self.frame_opciones, stretch=3)
+        self.frame_opciones.setContentsMargins(0, 20, 0, 0)
         
         # ----- Creo el título y le asigno un nombre para el estilo ----- #
         titulo = QLabel("🍔LA BURGUESIA🍔")
@@ -36,19 +37,19 @@ class AdminView(QWidget):
         subtitulo.setAlignment(Qt.AlignCenter)
         subtitulo.setContentsMargins(0, 0, 0, 10)
         
-        # ----- Añado todo al layout ----- #
         titulo_layout = QVBoxLayout()
         titulo_layout.addWidget(titulo)
         titulo_layout.addWidget(subtitulo)
-        self.frame_titulo_admin.setLayout(titulo_layout)
+        self.frame_titulo.setLayout(titulo_layout)
         
         # ----- Llamo los botones del admin ----- #
         self._setup_buttons_layout()
     
     def _setup_buttons_layout(self):
-        # ----- Seteo el layout del frame del inicio ----- #
-        self.frame_botones_administrador = QVBoxLayout(self.frame_opciones_admin)
+        self.opciones_layout = QVBoxLayout(self.frame_opciones)
 
+        icons_dir = os.path.join(os.path.dirname(__file__), "../resources/icons")
+        
         # ----- Creo un grupo para la parte de usuarios ----- #
         grupo_usuarios = QGroupBox("Usuarios")
         layout_usuarios = QGridLayout()
@@ -56,31 +57,27 @@ class AdminView(QWidget):
 
         # ----- Creo el botón para crear usuarios, agregando su icono y su estilo  ----- #
         self.btn_crear = QPushButton("Crear usuario")
-        crear_icon = os.path.dirname(__file__)
-        self.btn_crear.setIcon(QIcon(os.path.join(crear_icon, "icons/nuevo usuario.png")))
+        self.btn_crear.setIcon(QIcon(os.path.join(icons_dir, "nuevo usuario.png")))
         self.btn_crear.setIconSize(QSize(23, 23))
         self.btn_crear.setObjectName("id2")
         self.btn_crear.setFixedWidth(180)
         
         # ----- Creo el botón para modificar usuarios, agregando su icono y su estilo ----- #
         self.btn_modificar = QPushButton("Modificar usuario")
-        modificar_icon = os.path.dirname(__file__)
-        self.btn_modificar.setIcon(QIcon(os.path.join(modificar_icon, "icons/editar usuario.png")))
+        self.btn_modificar.setIcon(QIcon(os.path.join(icons_dir, "editar usuario.png")))
         self.btn_modificar.setIconSize(QSize(23, 23))
         self.btn_modificar.setObjectName("id5")
         self.btn_modificar.setFixedWidth(180)
         
         # ----- Creo el botón para eliminar usuarios, agregando su icono y su estilo ----- #
         self.btn_eliminar = QPushButton("Eliminar usuario")
-        eliminar_icon = os.path.dirname(__file__)
-        self.btn_eliminar.setIcon(QIcon(os.path.join(eliminar_icon, "icons/eliminar usuario.png")))
+        self.btn_eliminar.setIcon(QIcon(os.path.join(icons_dir, "eliminar usuario.png")))
         self.btn_eliminar.setIconSize(QSize(23, 23))
         self.btn_eliminar.setFixedWidth(180)
         
         # ----- Creo el botón para modificar al administrador, agregando su icono y su estilo ----- #
         self.btn_editar_admin = QPushButton("Modificar Admin")
-        editar_admin_icon = os.path.dirname(__file__)
-        self.btn_editar_admin.setIcon(QIcon(os.path.join(editar_admin_icon, "icons/modificar admin.png")))
+        self.btn_editar_admin.setIcon(QIcon(os.path.join(icons_dir, "modificar admin.png")))
         self.btn_editar_admin.setIconSize(QSize(23, 23))
         self.btn_editar_admin.setObjectName("id5")
         self.btn_editar_admin.setFixedWidth(180)
@@ -102,24 +99,21 @@ class AdminView(QWidget):
         
         # ----- Creo el botón para ver los registros, agregando su icono y su estilo ----- #
         self.btn_registros = QPushButton("Ver registros")
-        registros_icon = os.path.dirname(__file__)
-        self.btn_registros.setIcon(QIcon(os.path.join(registros_icon, "icons/registros.png")))
+        self.btn_registros.setIcon(QIcon(os.path.join(icons_dir, "registros.png")))
         self.btn_registros.setIconSize(QSize(23, 23))
         self.btn_registros.setObjectName("id4")
         self.btn_registros.setFixedWidth(180)
         
         # ----- Creo el botón para el respaldo de la app, agregando su icono y su estilo ----- #
         self.btn_respaldo = QPushButton("Respaldo")
-        respaldo_icon = os.path.dirname(__file__)
-        self.btn_respaldo.setIcon(QIcon(os.path.join(respaldo_icon, "icons/backup.png")))
+        self.btn_respaldo.setIcon(QIcon(os.path.join(icons_dir, "backup.png")))
         self.btn_respaldo.setIconSize(QSize(23, 23))
         self.btn_respaldo.setObjectName("id6")
         self.btn_respaldo.setFixedWidth(180)
         
         # ----- Creo el botón para volver al login principal, agregando su icono y su estilo ----- #
         self.btn_volver = QPushButton("Volver al menú")
-        volver_icon = os.path.dirname(__file__)
-        self.btn_volver.setIcon(QIcon(os.path.join(volver_icon, "icons/retroceder.png")))
+        self.btn_volver.setIcon(QIcon(os.path.join(icons_dir, "retroceder.png")))
         self.btn_volver.setIconSize(QSize(23, 23))
         self.btn_volver.setObjectName("id3")
         self.btn_volver.setFixedWidth(180)
@@ -134,9 +128,9 @@ class AdminView(QWidget):
         grupo_sistema.setLayout(layout_sistema)
         
         # ----- Agrego ambos grupos al frame del administrador ----- #
-        self.frame_botones_administrador.addWidget(grupo_usuarios)
-        self.frame_botones_administrador.addWidget(grupo_sistema)
-        self.frame_botones_administrador.addStretch()
+        self.opciones_layout.addWidget(grupo_usuarios)
+        self.opciones_layout.addWidget(grupo_sistema)
+        self.opciones_layout.addStretch()
         
         # ----- Seteo el grupo de los usuarios ----- #
         self.btn_volver.clicked.connect(lambda: self.volver_menu.emit())

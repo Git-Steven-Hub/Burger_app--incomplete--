@@ -5,11 +5,12 @@ general = """
                 stop:0 mediumaquamarine,
                 stop:1 paleturquoise);
         }
-        QFrame {
+        #frame_decorado {
             background: mintcream;
             border-radius: 30px;
         }
         QLabel {
+            background-color: transparent;
             color: black;
             font-family: Poppins;
             font-size: 16px;
@@ -70,12 +71,16 @@ general = """
             font-style: italic;
         }
         QGroupBox {
+            QFrame {
+                background-color: transparent;
+                }
             font-weight: bold;
             font-size: 12px;
             border: 2px solid mediumaquamarine;
             border-radius: 8px;
             background-color: mintcream;
             color: black;
+            
             }
         QGroupBox:title {
             subcontrol-origin: margin;

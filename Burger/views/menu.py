@@ -17,12 +17,15 @@ class MenuView(QWidget):
         root_layout = QVBoxLayout(self)
         
         # ----- Creo el widget principal ----- #
-        self.frame_titulo_menu = QFrame()
-        self.frame_opciones_menu = QFrame()
+        self.frame_titulo = QFrame()
+        self.frame_opciones= QFrame()
+        
+        self.frame_titulo.setObjectName("frame_decorado")
+        self.frame_opciones.setObjectName("frame_decorado")
         
         # ----- Creo el widget principal ----- #
-        root_layout.addWidget(self.frame_titulo_menu, stretch=1)
-        root_layout.addWidget(self.frame_opciones_menu, stretch=3)
+        root_layout.addWidget(self.frame_titulo, stretch=1)
+        root_layout.addWidget(self.frame_opciones, stretch=3)
         
         # ----- Creo el título y le asigno un nombre para el estilo ----- #
         titulo = QLabel("🍔LA BURGUESIA🍔")
@@ -39,14 +42,16 @@ class MenuView(QWidget):
         titulo_layout = QVBoxLayout()
         titulo_layout.addWidget(titulo)
         titulo_layout.addWidget(subtitulo)
-        self.frame_titulo_menu.setLayout(titulo_layout)
+        self.frame_titulo.setLayout(titulo_layout)
         
         # ----- Llamo a los botones ----- #
         self._setup_buttons_layout()
         
     def _setup_buttons_layout(self):
         # ----- Seteo el layout del frame del inicio ----- #
-        self.frame_botones_menu = QVBoxLayout(self.frame_opciones_menu)
+        self.frame_botones = QVBoxLayout(self.frame_opciones)
+        
+        
         
         # ----- Creo el botón para iniciar el pedido, colocando su icono y estilo ----- #
         self.btn_iniciar_pedido = QPushButton("Iniciar pedido")
@@ -102,7 +107,8 @@ class MenuView(QWidget):
         columnas.addWidget(self.btn_terminar_turno, 4, 0, alignment=Qt.AlignCenter)
         
         # ----- Agrego todo al layout principal ---- #
-        self.frame_botones_menu.addLayout(columnas)
+        self.frame_botones.addLayout(columnas)
 
         # conectar la señal pública a la acción del botón
+        self.btn_terminar_turno.clicked.connect(self.cerrar_turno.emit)
         self.btn_iniciar_pedido.clicked.connect(self.iniciar_pedido.emit)
