@@ -3,7 +3,9 @@ import os
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
-        
+from Burger.widgets.background import BackgroundFrame
+
+# ------ Creo al clase para poder ser stackeada ------ #
 class AdminView(QWidget):
     volver_menu = Signal()
     crear_usuario = Signal()
@@ -18,7 +20,8 @@ class AdminView(QWidget):
         self.frame_titulo = QFrame()
         self.frame_opciones = QFrame()
     
-        self.frame_titulo.setObjectName("frame_decorado")
+        self.frame_titulo = BackgroundFrame()
+        self.frame_titulo.setObjectName("frame_titulo")
         self.frame_opciones.setStyleSheet("QFrame {background-color: transparent;}")
         
         root_layout.addWidget(self.frame_titulo, stretch=1)

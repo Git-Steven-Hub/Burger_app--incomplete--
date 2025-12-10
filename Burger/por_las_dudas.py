@@ -1,3 +1,11 @@
+        sombra_titulo = QGraphicsDropShadowEffect()
+        sombra_titulo.setBlurRadius(15)
+        sombra_titulo.setOffset(2, 2)
+        sombra_titulo.setColor(QColor(0, 0, 0, 180))
+        self.sombra_titulo = sombra_titulo
+        
+        titulo.setGraphicsEffect(self.sombra_titulo)
+ 
     def setup_inicio(self):
         # ----- Creo el widget principal ----- #
         self.frame = QWidget()

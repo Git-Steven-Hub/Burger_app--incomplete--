@@ -1,8 +1,11 @@
 # ----- Importo las librerías necesarias ----- #
 import os
 from PySide6.QtGui import *
+from PySide6.QtGui import QShowEvent
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
+from Burger.widgets.background import BackgroundFrame
+from Burger.widgets.effects import apply_shadow_label
 
 class MenuView(QWidget):
     iniciar_pedido = Signal()
@@ -20,7 +23,8 @@ class MenuView(QWidget):
         self.frame_titulo = QFrame()
         self.frame_opciones= QFrame()
         
-        self.frame_titulo.setObjectName("frame_decorado")
+        self.frame_titulo = BackgroundFrame()
+        self.frame_titulo.setObjectName("frame_titulo")
         self.frame_opciones.setObjectName("frame_decorado")
         
         # ----- Creo el widget principal ----- #
@@ -28,30 +32,32 @@ class MenuView(QWidget):
         root_layout.addWidget(self.frame_opciones, stretch=3)
         
         # ----- Creo el título y le asigno un nombre para el estilo ----- #
-        titulo = QLabel("🍔LA BURGUESIA🍔")
-        titulo.setObjectName("titulo")
-        titulo.setAlignment(Qt.AlignCenter)
+        self.titulo_label = QLabel("🍔LA BURGUESIA🍔")
+        self.titulo_label.setObjectName("titulo")
+        self.titulo_label.setAlignment(Qt.AlignCenter)
         
         # ----- Creo el subtitulo y le asigno un nombre para el estilo ----- #
-        subtitulo = QLabel("¡Menu encargados!")
-        subtitulo.setObjectName("subtitulo")
-        subtitulo.setAlignment(Qt.AlignCenter)
-        subtitulo.setContentsMargins(0, 0, 0, 10)
+        self.subtitulo_label = QLabel("¡Menu encargados!")
+        self.subtitulo_label.setObjectName("subtitulo")
+        self.subtitulo_label.setAlignment(Qt.AlignCenter)
+        self.subtitulo_label.setContentsMargins(0, 0, 0, 10)
         
         # ----- Añado todo al layout ----- #
         titulo_layout = QVBoxLayout()
-        titulo_layout.addWidget(titulo)
-        titulo_layout.addWidget(subtitulo)
+        titulo_layout.addWidget(self.titulo_label)
+        titulo_layout.addWidget(self.subtitulo_label)
         self.frame_titulo.setLayout(titulo_layout)
-        
         # ----- Llamo a los botones ----- #
         self._setup_buttons_layout()
+    
+    def showEvent(self, event):
+        super().showEvent(event)
+        if not hasattr(self, "shadows") or self.shadows is None:
+            self.shadows = apply_shadow_label([self.titulo_label, self.subtitulo_label])
         
     def _setup_buttons_layout(self):
         # ----- Seteo el layout del frame del inicio ----- #
         self.frame_botones = QVBoxLayout(self.frame_opciones)
-        
-        
         
         # ----- Creo el botón para iniciar el pedido, colocando su icono y estilo ----- #
         self.btn_iniciar_pedido = QPushButton("Iniciar pedido")

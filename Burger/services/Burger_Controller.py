@@ -1,13 +1,11 @@
+# ------ Importo las librerías necesarias ------ #
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from Burger.views import InicioView, AdminView, MenuView, PedidosView
-from Burger.widgets.animations import fade_slide
+from Burger.animations.transitions import fade_slide
 from Burger.widgets.close_shift import CloseShiftMessage
 import re
-
-# Nota: no importamos UI ni Sistema aquí para evitar dependencias cíclicas.
-# `ControladorMain` recibe las instancias `ui` y `sistema` desde `Main.py`.
-
+  
 class ControladorMain:
     def __init__(self, views, sistema):
         self.ui = views
@@ -28,16 +26,16 @@ class ControladorMain:
         
         
         # ------ Conexiones MenuView ------ #
-        ui.menu.iniciar_pedido.connect(lambda: ui.stack.setCurrentWidget(ui.pedidos))
+        ui.menu.iniciar_pedido.connect(lambda: self.cambiar_frame(ui.menu, ui.pedidos))
         ui.menu.cerrar_turno.connect(self.terminar_turno)
         
         # ------ Conexiones PedidosView ------ #
-        ui.pedidos.retroceder.connect(lambda: ui.stack.setCurrentWidget(ui.menu))
+        ui.pedidos.retroceder.connect(lambda: self.cambiar_frame(ui.pedidos, ui.menu))
     
     def login_usuario(self, usuario, contrasena):
         self.cambiar_frame(self.ui.inicio, self.ui.menu)
         
-    
+        
     def cerrar_aplicacion(self):
         try:
             self.sistema.apagar_sistema()

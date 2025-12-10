@@ -6,10 +6,13 @@ from PySide6.QtCore import *
 from Burger.views import InicioView, AdminView, MenuView, PedidosView
 from Burger.styles.Styles import estilos_boton
 from Burger.services.Burger_System import Sistema
+from Burger.animations.main_animation import WindowAnimator
 
 class Burger(QMainWindow):
     def __init__(self):
         super().__init__()
+        
+        self._first_show = True
         
         # ----- Seteo el tamaño de la app para que no sea modificable al uso ----- #
         self.setFixedSize(550, 500)      
@@ -48,3 +51,12 @@ class Burger(QMainWindow):
 
         # ----- Aplicar estilos globales ----- #
         self.setStyleSheet(estilos_boton)
+        
+        self.animator = WindowAnimator(self)
+        
+    def showEvent(self, event):
+        super().showEvent(event)
+        if self._first_show:
+            self._first_show = False
+            self.setWindowOpacity(0.0)
+            QTimer.singleShot(0, self.animator.start)

@@ -7,7 +7,6 @@ from PySide6.QtCore import QTranslator, QLocale, QLibraryInfo
 # Usar imports explícitos del paquete `Burger`.
 # Recomendado: ejecutar con `python -m Burger.Main` desde el directorio padre.
 from Burger.Burger_UI import Burger
-from Burger.styles.Styles import estilos_boton
 from Burger.services.Burger_System import Sistema
 from Burger.services.Burger_Controller import ControladorMain
 

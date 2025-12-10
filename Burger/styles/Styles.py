@@ -5,9 +5,17 @@ general = """
                 stop:0 mediumaquamarine,
                 stop:1 paleturquoise);
         }
-        #frame_decorado {
-            background: mintcream;
+        #frame_titulo{
             border-radius: 30px;
+        }
+        #frame_decorado {
+            background: qlineargradient(
+            spread:pad, x1:0, y1:0, x2:0, y2:1,
+            stop:0 #fff8e6,
+            stop:1 #ffffff
+            );
+        border-radius: 20px;
+            border: 1.5px solid black;
         }
         QLabel {
             background-color: transparent;
@@ -15,7 +23,7 @@ general = """
             font-family: Poppins;
             font-size: 16px;
         }
-        #label_nombre {
+        #label_cliente {
             font-size: 20px; 
             font-weight: bold;
         }
@@ -28,10 +36,11 @@ general = """
             font-size: 14px;
         }
         #bienvenida {
-            font-family: Ink Free, Cascadia Mono;
-            font-size: 34px;
-            font-weight: bold;
-            letter-spacing: 1px;
+            background-color: transparent;
+            color: white;
+            font-family: Poppins, Vedana, Arial;
+            font-size: 32px;
+            font-weight: 900;
         }
         #titulo {
             font-family: Ink Free, Cascadia Mono;
@@ -41,7 +50,7 @@ general = """
         }
         #subtitulo {
             font-size: 18px;
-            font-style: Poppins;
+            font-family: Poppins;
             color: #555;
         }
         #encargado {
@@ -76,11 +85,14 @@ general = """
                 }
             font-weight: bold;
             font-size: 12px;
-            border: 2px solid mediumaquamarine;
+            border: 2px solid black;
             border-radius: 8px;
-            background-color: mintcream;
+            background-color: qlineargradient(
+                spread:pad, x1:0, y1:0, x2:0, y2:1,
+                stop:0 #fff8e6,
+                stop:1 #ffffff
+            );
             color: black;
-            
             }
         QGroupBox:title {
             subcontrol-origin: margin;

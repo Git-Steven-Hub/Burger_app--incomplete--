@@ -1,8 +1,13 @@
+# ------ Importo las librerías necesarias ------ #
 import os
+from PySide6.QtGui import QHideEvent, QShowEvent
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
+from Burger.widgets.background import BackgroundFrame
+from Burger.widgets.effects import apply_shadow_label
 
+# ------ Creo al clase para poder ser stackeada ------ #
 class InicioView(QWidget):
     ir_admin = Signal()
     iniciar_sesion = Signal(str, str)
@@ -19,7 +24,8 @@ class InicioView(QWidget):
         self.frame_titulo = QFrame()
         self.frame_opciones = QFrame()
     
-        self.frame_titulo.setObjectName("frame_decorado")
+        self.frame_titulo = BackgroundFrame()
+        self.frame_titulo.setObjectName("frame_titulo")
         self.frame_opciones.setObjectName("frame_decorado")
         
         # ----- Le agrego espacio para cada frame ----- #
@@ -27,42 +33,30 @@ class InicioView(QWidget):
         root_layout.addWidget(self.frame_opciones, stretch=3)
         
         # ----- Añado el título y le asigno su nombre para el estilo ----- #
-        titulo = QLabel("¡BIENVENIDO NUEVAMENTE!\n🍔 LA BURGUESIA 🍔")
-        titulo.setObjectName("bienvenida")
-        titulo.setAlignment(Qt.AlignCenter)
+        self.titulo_label = QLabel("¡BIENVENIDO NUEVAMENTE!\n LA BURGUESIA ")
+        self.titulo_label.setObjectName("bienvenida")
+        self.titulo_label.setAlignment(Qt.AlignCenter)
         QSpacerItem(20, 40)
         
         # ----- Añado el subtitulo y le agrego su estilo ----- #
-        subtitulo = QLabel("¡Las mejores burguers!")
-        subtitulo.setObjectName("subtitulo")
-        subtitulo.setAlignment(Qt.AlignCenter)
-        subtitulo.setContentsMargins(0, 0, 0, 10)
+        self.subtitulo_label = QLabel("¡Las mejores burguers!")
+        self.subtitulo_label.setObjectName("subtitulo")
+        self.subtitulo_label.setAlignment(Qt.AlignCenter)
+        self.subtitulo_label.setContentsMargins(0, 0, 0, 10)
         
         titulo_layout = QVBoxLayout()
-        titulo_layout.addWidget(titulo)
-        titulo_layout.addWidget(subtitulo)
+        titulo_layout.addWidget(self.titulo_label)
+        titulo_layout.addWidget(self.subtitulo_label)
         self.frame_titulo.setLayout(titulo_layout)
-        
-        # ----- Creo el efecto de opacidad ----- #
-        efecto = QGraphicsOpacityEffect(self)
-        self.setGraphicsEffect(efecto)
-        efecto.setOpacity(0.0)
-        self.efecto = efecto
-        
-        # ----- Creo la animación ----- #
-        animacion = QPropertyAnimation(efecto, b"opacity")
-        animacion.setDuration(1000)
-        animacion.setStartValue(0.0)
-        animacion.setEndValue(1.0)
-        animacion.setEasingCurve(QEasingCurve.OutCubic)
-        # ----- Mantengo la referencía de la animación ----- #
-        self._anim = animacion
-        
-        animacion.start()
-        
         # ----- Llamo a los botones para rellenar opciones_section ----- #
         self._setup_buttons_layout()
         
+    def showEvent(self, event):
+        super().showEvent(event)
+        if not hasattr(self, "shadows") or self.shadows is None:
+            self.shadows = apply_shadow_label([self.titulo_label, self.subtitulo_label])
+        
+
     def _setup_buttons_layout(self):
         # ----- Usar el layout de opciones_section creado en _build_ui ----- #
         self.opciones_layout = QVBoxLayout(self.frame_opciones)
