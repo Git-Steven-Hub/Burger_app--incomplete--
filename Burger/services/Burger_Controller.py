@@ -1,16 +1,19 @@
 # ------ Importo las librerías necesarias ------ #
-from PySide6.QtWidgets import *
-from PySide6.QtCore import *
 from Burger.views import InicioView, AdminView, MenuView, PedidosView
 from Burger.animations.transitions import fade_slide
 from Burger.widgets.close_shift import CloseShiftMessage
 import re
-  
+
+# ------ Creo la clase controladora (lógica) ------ #
 class ControladorMain:
+    # ------ Creo el init tomando las vistas y el sistema ------ #
     def __init__(self, views, sistema):
+        # ------ Defino el ui y el sistema (además creo un bloqueador de animación para evitar bugs visuales) ------ #
         self.ui = views
         self.sistema = sistema
+        self.animado = False
         
+        # ------ Llamo a las acciones ------ #
         self.conectar_acciones()
         
     def conectar_acciones(self):
@@ -44,7 +47,18 @@ class ControladorMain:
         self.ui.close()
     
     def cambiar_frame(self, frame_actual, frame_siguiente):
-        self.animaciones = fade_slide(self.ui.stack, frame_actual, frame_siguiente)
+        if self.animado:
+            return
+        
+        self.animado = True
+        
+        grupo = fade_slide(self.ui.stack, frame_actual, frame_siguiente)
+        
+        if grupo:
+            grupo.finished.connect(lambda: self._animacion_finalizada())
+            
+    def _animacion_finalizada(self):
+        self.animado = False
         
     def terminar_turno(self):
         confirm = CloseShiftMessage(self.ui)

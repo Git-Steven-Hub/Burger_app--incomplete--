@@ -1,9 +1,8 @@
 # ----- Importo las librerías necesarias ----- #
 import os
-from PySide6.QtGui import *
-from PySide6.QtGui import QShowEvent
-from PySide6.QtWidgets import *
-from PySide6.QtCore import *
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QFrame, QLabel, QPushButton, QLineEdit, QGridLayout, QHBoxLayout, QSpacerItem
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt, QSize, Signal
 from Burger.widgets.background import BackgroundFrame
 from Burger.widgets.effects import apply_shadow_label
 
@@ -32,12 +31,12 @@ class MenuView(QWidget):
         root_layout.addWidget(self.frame_opciones, stretch=3)
         
         # ----- Creo el título y le asigno un nombre para el estilo ----- #
-        self.titulo_label = QLabel("🍔LA BURGUESIA🍔")
+        self.titulo_label = QLabel("¡MENU ENCARGADOS!\nLA BURGUESIA")
         self.titulo_label.setObjectName("titulo")
         self.titulo_label.setAlignment(Qt.AlignCenter)
         
         # ----- Creo el subtitulo y le asigno un nombre para el estilo ----- #
-        self.subtitulo_label = QLabel("¡Menu encargados!")
+        self.subtitulo_label = QLabel("¡nombre!")
         self.subtitulo_label.setObjectName("subtitulo")
         self.subtitulo_label.setAlignment(Qt.AlignCenter)
         self.subtitulo_label.setContentsMargins(0, 0, 0, 10)
@@ -47,6 +46,7 @@ class MenuView(QWidget):
         titulo_layout.addWidget(self.titulo_label)
         titulo_layout.addWidget(self.subtitulo_label)
         self.frame_titulo.setLayout(titulo_layout)
+        
         # ----- Llamo a los botones ----- #
         self._setup_buttons_layout()
     
@@ -58,42 +58,40 @@ class MenuView(QWidget):
     def _setup_buttons_layout(self):
         # ----- Seteo el layout del frame del inicio ----- #
         self.frame_botones = QVBoxLayout(self.frame_opciones)
-        
+
+        # ------ Creo el apartado que se encarga de encontrar todos los iconos ------ #
+        icons_dir = os.path.join(os.path.dirname(__file__), "../resources/icons")
+
         # ----- Creo el botón para iniciar el pedido, colocando su icono y estilo ----- #
         self.btn_iniciar_pedido = QPushButton("Iniciar pedido")
-        pedido_icon = os.path.dirname(__file__)
-        self.btn_iniciar_pedido.setIcon(QIcon(os.path.join(pedido_icon, "icons/combo.png")))
+        self.btn_iniciar_pedido.setIcon(QIcon(os.path.join(icons_dir, "combo.png")))
         self.btn_iniciar_pedido.setIconSize(QSize(25, 25))    
         self.btn_iniciar_pedido.setObjectName("id1")
         self.btn_iniciar_pedido.setFixedWidth(380)
         
         # ----- Creo el botón para ver el resumen del día, colocando su icono y estilo----- #
         self.btn_estado_turno = QPushButton("Ver resumen del día")
-        resumen_icon = os.path.dirname(__file__)
-        self.btn_estado_turno.setIcon(QIcon(os.path.join(resumen_icon, "icons/resumen.png")))
+        self.btn_estado_turno.setIcon(QIcon(os.path.join(icons_dir, "resumen.png")))
         self.btn_estado_turno.setIconSize(QSize(25, 25))        
         self.btn_estado_turno.setObjectName("id4")
         self.btn_estado_turno.setFixedWidth(380)
         
         # ----- Creo el botón para ver el historial completo, colocando su icono y estilo ----- #
         self.btn_historial_turno = QPushButton("Ver tu historial de turnos")
-        turnos_icon = os.path.dirname(__file__)
-        self.btn_historial_turno.setIcon(QIcon(os.path.join(turnos_icon, "icons/turnos.png")))
+        self.btn_historial_turno.setIcon(QIcon(os.path.join(icons_dir, "turnos.png")))
         self.btn_historial_turno.setIconSize(QSize(25, 25))
         self.btn_historial_turno.setFixedWidth(380)
         
         # ----- Creo el botón para cambiar la propia contraseña, colocando su icono y estilo ----- #
         self.btn_cambiar_contrasena = QPushButton("Cambiar contraseña")
-        cambiar_contrasena_icon = os.path.dirname(__file__)
-        self.btn_cambiar_contrasena.setIcon(QIcon(os.path.join(cambiar_contrasena_icon, "icons/password.png")))
+        self.btn_cambiar_contrasena.setIcon(QIcon(os.path.join(icons_dir, "password.png")))
         self.btn_cambiar_contrasena.setIconSize(QSize(25, 25))
         self.btn_cambiar_contrasena.setObjectName("id5")
         self.btn_cambiar_contrasena.setFixedWidth(380)
         
         # ----- Creo el botón para cerrar el turno, colocando su icono y estilo ----- #
         self.btn_terminar_turno = QPushButton("Cerrar turno")
-        terminar_turno_icon = os.path.dirname(__file__)
-        self.btn_terminar_turno.setIcon(QIcon(os.path.join(terminar_turno_icon, "icons/salir.png")))
+        self.btn_terminar_turno.setIcon(QIcon(os.path.join(icons_dir, "salir.png")))
         self.btn_terminar_turno.setIconSize(QSize(25, 25))
         self.btn_terminar_turno.setObjectName("id3")
         self.btn_terminar_turno.setFixedWidth(380)

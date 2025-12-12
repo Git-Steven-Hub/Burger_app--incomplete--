@@ -2,19 +2,20 @@
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve, QRect, QParallelAnimationGroup
 from PySide6.QtWidgets import QStackedWidget, QWidget
 
-
+# ------ Tomo las referencias del stack, el frame actual y el frame que sigue ------ #
 def fade_slide(stack: QStackedWidget, old_widget: QWidget, new_widget: QWidget, duration=500, direction="left"):
     
+    # ------ Si el widget antiguo es igual al nuevo lo devuelve------ #
     if old_widget == new_widget:
         return
 
-    # ----- Posiciones -----
+    # ----- Tomo las posiciones ----- #
     stack_rect = stack.geometry()
     old_geometry = old_widget.geometry()
     new_widget.setGeometry(stack_rect)
     new_widget.show()
 
-    # ----- Solo animamos geometría (slide) -----
+    # ----- Animo las geometrías (el efecto de slide) ----- #
     if direction == "left":
         start_new = QRect(stack_rect.width(), stack_rect.y(), stack_rect.width(), stack_rect.height())
         end_new = stack_rect
@@ -36,7 +37,7 @@ def fade_slide(stack: QStackedWidget, old_widget: QWidget, new_widget: QWidget, 
     old_anim.setDuration(duration)
     old_anim.setEasingCurve(QEasingCurve.InOutCubic)
 
-    # ----- Grupo paralelo -----
+    # ------ Agrupo las animaciones ------ #
     group = QParallelAnimationGroup()
     group.addAnimation(new_anim)
     group.addAnimation(old_anim)
@@ -46,10 +47,10 @@ def fade_slide(stack: QStackedWidget, old_widget: QWidget, new_widget: QWidget, 
         stack.setCurrentWidget(new_widget)
         old_widget.hide()
         old_widget.setGeometry(old_geometry)
-
+    
     group.finished.connect(on_finished)
 
-    # ----- Guardar referencia para evitar garbage collector -----
+    # ----- Guardo las referencias -----
     stack._anim_group = group
     group.start()
 

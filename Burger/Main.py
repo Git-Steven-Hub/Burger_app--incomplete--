@@ -1,7 +1,6 @@
 # Importo las librerías necesarias
-import sys, os, warnings
+import sys, warnings
 from PySide6.QtWidgets import QApplication
-from PySide6.QtGui import QIcon
 from PySide6.QtCore import QTranslator, QLocale, QLibraryInfo
 
 # Usar imports explícitos del paquete `Burger`.

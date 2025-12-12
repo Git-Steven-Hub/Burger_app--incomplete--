@@ -1,18 +1,20 @@
 # Importo las librerías necesarias
-import os, sys, warnings, re, ctypes
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
-from PySide6.QtCore import *
-from Burger.views import InicioView, AdminView, MenuView, PedidosView
-from Burger.styles.Styles import estilos_boton
-from Burger.services.Burger_System import Sistema
+import os, ctypes
+from PySide6.QtWidgets import QMainWindow, QStackedWidget
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import QTimer
+from Burger.animations.window_close import WindowCloseAnimator
 from Burger.animations.main_animation import WindowAnimator
+from Burger.views import InicioView, AdminView, MenuView, PedidosView
+from Burger.resources.styles.buttons_styles import estilos_boton
+
 
 class Burger(QMainWindow):
     def __init__(self):
         super().__init__()
         
         self._first_show = True
+        self._closing = False
         
         # ----- Seteo el tamaño de la app para que no sea modificable al uso ----- #
         self.setFixedSize(550, 500)      
@@ -53,6 +55,8 @@ class Burger(QMainWindow):
         self.setStyleSheet(estilos_boton)
         
         self.animator = WindowAnimator(self)
+        self.cls_animation = WindowCloseAnimator(self)
+        
         
     def showEvent(self, event):
         super().showEvent(event)
@@ -60,3 +64,11 @@ class Burger(QMainWindow):
             self._first_show = False
             self.setWindowOpacity(0.0)
             QTimer.singleShot(0, self.animator.start)
+            
+    def closeEvent(self, event):
+        if self._closing:
+            return super().closeEvent(event)
+        
+        event.ignore()
+        self._closing = True
+        self.cls_animation.animate_close()

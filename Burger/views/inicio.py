@@ -1,9 +1,8 @@
 # ------ Importo las librerías necesarias ------ #
 import os
-from PySide6.QtGui import QHideEvent, QShowEvent
-from PySide6.QtWidgets import *
-from PySide6.QtGui import *
-from PySide6.QtCore import *
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QFrame, QLabel, QPushButton, QLineEdit, QGridLayout, QHBoxLayout, QSpacerItem
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt, QSize, Signal
 from Burger.widgets.background import BackgroundFrame
 from Burger.widgets.effects import apply_shadow_label
 
@@ -13,17 +12,21 @@ class InicioView(QWidget):
     iniciar_sesion = Signal(str, str)
     nuevo_usuario = Signal(str, str)
     
+    # ------ Creo el init ------ #
     def __init__(self, parent=None):
         super().__init__(parent)
         self._build_ui()
     
+    # ------ Creo el UI en el mismo widget ------ #
     def _build_ui(self):
+        # ------ Creo la raíz ------ #
         root_layout = QVBoxLayout(self)
     
         # ----- Creo los frames para cada opción ----- #
         self.frame_titulo = QFrame()
         self.frame_opciones = QFrame()
-    
+
+        # ------ Le agrego el fondo al título y seteo sus nombres para su estilo ------ #
         self.frame_titulo = BackgroundFrame()
         self.frame_titulo.setObjectName("frame_titulo")
         self.frame_opciones.setObjectName("frame_decorado")
@@ -32,35 +35,39 @@ class InicioView(QWidget):
         root_layout.addWidget(self.frame_titulo, stretch=1)
         root_layout.addWidget(self.frame_opciones, stretch=3)
         
-        # ----- Añado el título y le asigno su nombre para el estilo ----- #
+        # ----- Creo el título y le asigno su nombre para el estilo ----- #
         self.titulo_label = QLabel("¡BIENVENIDO NUEVAMENTE!\n LA BURGUESIA ")
-        self.titulo_label.setObjectName("bienvenida")
+        self.titulo_label.setObjectName("titulo")
         self.titulo_label.setAlignment(Qt.AlignCenter)
         QSpacerItem(20, 40)
         
-        # ----- Añado el subtitulo y le agrego su estilo ----- #
+        # ----- Creo el subtitulo y le agrego su estilo ----- #
         self.subtitulo_label = QLabel("¡Las mejores burguers!")
         self.subtitulo_label.setObjectName("subtitulo")
         self.subtitulo_label.setAlignment(Qt.AlignCenter)
-        self.subtitulo_label.setContentsMargins(0, 0, 0, 10)
+        self.subtitulo_label.setContentsMargins(0, 0, 0, 5)
         
+        # ------ Añado el título, el subtitulo y lo seteo ------ #
         titulo_layout = QVBoxLayout()
         titulo_layout.addWidget(self.titulo_label)
         titulo_layout.addWidget(self.subtitulo_label)
         self.frame_titulo.setLayout(titulo_layout)
+        
         # ----- Llamo a los botones para rellenar opciones_section ----- #
         self._setup_buttons_layout()
-        
+    
+    # ------ Creo el evento para que se vean las sombras del título y del subtitulo ------ #
     def showEvent(self, event):
         super().showEvent(event)
         if not hasattr(self, "shadows") or self.shadows is None:
             self.shadows = apply_shadow_label([self.titulo_label, self.subtitulo_label])
         
-
+    # ------ Creo el apartado de los botones ------ #
     def _setup_buttons_layout(self):
-        # ----- Usar el layout de opciones_section creado en _build_ui ----- #
+        # ----- Uso el layout de las opciones ----- #
         self.opciones_layout = QVBoxLayout(self.frame_opciones)
         
+        # ------ Creo el apartado que se encarga de encontrar todos los iconos ------ #
         icons_dir = os.path.join(os.path.dirname(__file__), "../resources/icons")
         
         # ----- Creo el botón de inicio y le asigno nombre ----- #
@@ -82,6 +89,7 @@ class InicioView(QWidget):
         self.btn_administrador.setIcon(QIcon(os.path.join(icons_dir, "admin.png")))
         self.btn_administrador.setIconSize(QSize(25, 25))
         self.btn_administrador.setObjectName("boton_admin")
+        
         # ----- Creo el botón de salir y le asigno nombre ----- #
         self.btn_salir = QPushButton("Salir")
         self.btn_salir.setIcon(QIcon(os.path.join(icons_dir, "cerrar app.png")))

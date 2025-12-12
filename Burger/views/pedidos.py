@@ -1,9 +1,10 @@
 # ----- Importo las librerías necesarias ----- #
 import os
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
-from PySide6.QtCore import *
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QFrame, QLabel, QPushButton, QLineEdit, QGridLayout, QHBoxLayout, QRadioButton
+from PySide6.QtGui import QIcon, QIntValidator
+from PySide6.QtCore import Qt, QSize, Signal
 from Burger.widgets.background import BackgroundFrame
+from Burger.widgets.effects import apply_shadow_label
         
 class PedidosView(QWidget):
     retroceder = Signal()
@@ -30,27 +31,36 @@ class PedidosView(QWidget):
         root_layout.addWidget(self.frame_opciones, stretch=3)
         
         # ----- Creo el título y le asigno un nombre para el estilo ----- #
-        titulo = QLabel("🍔LA BURGUESIA🍔")
-        titulo.setObjectName("titulo")
-        titulo.setAlignment(Qt.AlignCenter)
+        self.titulo_label = QLabel("SECCION PEDIDOS\nLA BURGUESIA")
+        self.titulo_label.setObjectName("titulo")
+        self.titulo_label.setAlignment(Qt.AlignCenter)
         
         # ----- Creo el subtitulo y le asigno un nombre para el estilo ----- #
-        subtitulo = QLabel("¡PEDIDOS!")
-        subtitulo.setObjectName("subtitulo")
-        subtitulo.setAlignment(Qt.AlignCenter)
+        self.subtitulo_label = QLabel("¡PEDIDOS!")
+        self.subtitulo_label.setObjectName("subtitulo")
+        self.subtitulo_label.setAlignment(Qt.AlignCenter)
+        self.subtitulo_label.setContentsMargins(0, 0, 0, 10)
         
         # ----- Añado todo al layout ----- #
         titulo_layout = QVBoxLayout()
-        titulo_layout.addWidget(titulo)
-        titulo_layout.addWidget(subtitulo)
+        titulo_layout.addWidget(self.titulo_label)
+        titulo_layout.addWidget(self.subtitulo_label)
         self.frame_titulo.setLayout(titulo_layout)
         
         # ----- Llamo a los botones ----- #
         self._setup_buttons_layout()
-        
+    
+    def showEvent(self, event):
+        super().showEvent(event)
+        if not hasattr(self, "shadows") or self.shadows is None:
+            self.shadows = apply_shadow_label([self.titulo_label, self.subtitulo_label])
+    
     def _setup_buttons_layout(self):
         # ----- Seteo el layout del frame del inicio ----- #
         self.frame_opciones_layout = QVBoxLayout(self.frame_opciones)
+
+        # ------ Creo el apartado que se encarga de encontrar todos los iconos ------ #
+        icons_dir = os.path.join(os.path.dirname(__file__), "../resources/icons")
 
         # ----- Validador para los pedidos ----- #
         self.validador = QIntValidator(0, 100)
@@ -132,14 +142,12 @@ class PedidosView(QWidget):
 
         # ----- Creo el botón para volver al menu ----- #
         self.btn_atras = QPushButton("Retroceder")
-        boton_atras_icon = os.path.dirname(__file__)
-        self.btn_atras.setIcon(QIcon(os.path.join(boton_atras_icon, "icons/retroceder.png")))
+        self.btn_atras.setIcon(QIcon(os.path.join(icons_dir, "retroceder.png")))
         self.btn_atras.setIconSize(QSize(25, 25))
         
         # ----- Creo el botón para confirmar el pedido ----- #
         self.btn_confirmar = QPushButton("Confirmar")
-        boton_confirmar_icon = os.path.dirname(__file__)
-        self.btn_confirmar.setIcon(QIcon(os.path.join(boton_confirmar_icon, "icons/aceptar.png")))
+        self.btn_confirmar.setIcon(QIcon(os.path.join(icons_dir, "aceptar.png")))
         self.btn_confirmar.setIconSize(QSize(25, 25))
         self.btn_confirmar.setObjectName("id1")
 

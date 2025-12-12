@@ -1,9 +1,10 @@
 # ----- Importo las librerías necesarias ----- #
 import os
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
-from PySide6.QtCore import *
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QFrame, QLabel, QPushButton, QLineEdit, QGridLayout, QGroupBox
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt, QSize, Signal
 from Burger.widgets.background import BackgroundFrame
+from Burger.widgets.effects import apply_shadow_label
 
 # ------ Creo al clase para poder ser stackeada ------ #
 class AdminView(QWidget):
@@ -30,27 +31,33 @@ class AdminView(QWidget):
         self.frame_opciones.setContentsMargins(0, 20, 0, 0)
         
         # ----- Creo el título y le asigno un nombre para el estilo ----- #
-        titulo = QLabel("🍔LA BURGUESIA🍔")
-        titulo.setObjectName("titulo")
-        titulo.setAlignment(Qt.AlignCenter)
+        self.titulo_label = QLabel("LA BURGUESIA")
+        self.titulo_label.setObjectName("titulo")
+        self.titulo_label.setAlignment(Qt.AlignCenter)
         
         # ----- Creo el subtitulo y le asigno un nombre para el estilo ----- #
-        subtitulo = QLabel("¡Administrador!")
-        subtitulo.setObjectName("subtitulo")
-        subtitulo.setAlignment(Qt.AlignCenter)
-        subtitulo.setContentsMargins(0, 0, 0, 10)
+        self.subtitulo_label = QLabel("¡Administrador!")
+        self.subtitulo_label.setObjectName("subtitulo")
+        self.subtitulo_label.setAlignment(Qt.AlignCenter)
+        self.subtitulo_label.setContentsMargins(0, 0, 0, 10)
         
         titulo_layout = QVBoxLayout()
-        titulo_layout.addWidget(titulo)
-        titulo_layout.addWidget(subtitulo)
+        titulo_layout.addWidget(self.titulo_label)
+        titulo_layout.addWidget(self.subtitulo_label)
         self.frame_titulo.setLayout(titulo_layout)
         
         # ----- Llamo los botones del admin ----- #
         self._setup_buttons_layout()
     
+    def showEvent(self, event):
+        super().showEvent(event)
+        if not hasattr(self, "shadows") or self.shadows is None:
+            self.shadows = apply_shadow_label([self.titulo_label, self.subtitulo_label])
+    
     def _setup_buttons_layout(self):
         self.opciones_layout = QVBoxLayout(self.frame_opciones)
 
+        # ------ Creo el apartado que se encarga de encontrar todos los iconos ------ #
         icons_dir = os.path.join(os.path.dirname(__file__), "../resources/icons")
         
         # ----- Creo un grupo para la parte de usuarios ----- #
