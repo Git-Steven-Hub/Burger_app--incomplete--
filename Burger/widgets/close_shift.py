@@ -7,7 +7,7 @@ class CloseShiftMessage(QMessageBox):
         self.setWindowTitle("Cerrar turno")
         self.setText("¿Estás seguro que quiere cerrar el turno?")
         self.setIcon(QMessageBox.Warning)
-
+ 
         self.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         self.setDefaultButton(QMessageBox.No)
         

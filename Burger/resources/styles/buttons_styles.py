@@ -28,11 +28,9 @@ estilos_boton = general + """
         #id1:hover {
             background-color: seagreen;
             border-color: seagreen;
-            border: 2px solid rgba(255,255,255,0.6);
         }
         #id1:pressed {
             background-color: darkgreen;
-            border: 2px solid rgba(0,0,0,0.4);
         }
         #id2 {
             background-color: dodgerblue;
@@ -89,7 +87,6 @@ estilos_boton = general + """
         #id6:pressed {
             background-color: #BDAB0F;
         }
-        
         #boton_admin {
             background-color: teal;
             border: 2px solid lightseagreen;
@@ -104,15 +101,20 @@ estilos_boton = general + """
         QMessageBox QPushButton {
             background-color: mediumseagreen;
             border: 2px solid forestgreen;
-            border-radius: 8px;
+            border-radius: 4px;
             padding: 6px 12px;
             font-weight: bold;
         }
         QMessageBox QPushButton:hover {
             background-color: seagreen;
+            border-color: seagreen;
+            padding-top: 4px;
+            padding-bottom: 8px;
         }
         QMessageBox QPushButton:pressed {
             background-color: darkgreen;
+            padding-top: 8px;
+            padding-bottom: 4px;
         }
         QRadioButton {
             font-size: 14px;

@@ -2,6 +2,8 @@
 from Burger.views import InicioView, AdminView, MenuView, PedidosView
 from Burger.animations.transitions import fade_slide
 from Burger.widgets.close_shift import CloseShiftMessage
+from Burger.widgets.auth_dialog import EnterAdmin
+from Burger.widgets.datos_pedidos import DatosPedidos
 import re
 
 # ------ Creo la clase controladora (lógica) ------ #
@@ -20,7 +22,7 @@ class ControladorMain:
         ui = self.ui
         
         # ------ Conexiones InicioView ------ #
-        ui.inicio.ir_admin.connect(lambda: self.cambiar_frame(ui.inicio, ui.admin))
+        ui.inicio.ir_admin.connect(self.confirmar_admin)
         ui.inicio.iniciar_sesion.connect(self.login_usuario)
         ui.inicio.btn_salir.clicked.connect(self.cerrar_aplicacion)
         
@@ -34,11 +36,20 @@ class ControladorMain:
         
         # ------ Conexiones PedidosView ------ #
         ui.pedidos.retroceder.connect(lambda: self.cambiar_frame(ui.pedidos, ui.menu))
+        ui.pedidos.confirmar_pedido.connect(self.tomar_pedido)
     
     def login_usuario(self, usuario, contrasena):
         self.cambiar_frame(self.ui.inicio, self.ui.menu)
         
-        
+    def confirmar_admin(self):
+        dialogo = EnterAdmin(self.ui)
+
+        if dialogo.exec():
+            if dialogo.admin_user.text() == "admin" and dialogo.admin_pass.text() == "admin123":
+                self.cambiar_frame(self.ui.inicio, self.ui.admin)
+            else:
+                dialogo.out()
+    
     def cerrar_aplicacion(self):
         try:
             self.sistema.apagar_sistema()
@@ -64,6 +75,20 @@ class ControladorMain:
         confirm = CloseShiftMessage(self.ui)
         if confirm.execute():
             self.cambiar_frame(self.ui.menu, self.ui.inicio)
+            
+    def tomar_pedido(self):
+        pedido = PedidosView(self.ui.pedidos)
+        datos_de_pedido = DatosPedidos(self.ui.pedidos, self.ui)
+        
+        if len(pedido.nombre_cliente.text()) < 3:
+            datos_de_pedido.error_nombre()
+        
+
+        
+        datos_de_pedido.exec()
+
+        
+        
 """"      
     def tomar_pedido(self, datos):
         if len(datos["Cliente"]) < 3:

@@ -8,11 +8,12 @@ from Burger.animations.main_animation import WindowAnimator
 from Burger.views import InicioView, AdminView, MenuView, PedidosView
 from Burger.resources.styles.buttons_styles import estilos_boton
 
-
+# ----- Creo la clase que se encarga de manejar todas las vistas ----- #
 class Burger(QMainWindow):
     def __init__(self):
         super().__init__()
         
+        # ----- Creo dos variables para evitar bugs con las animaciones al abrir la app por primera vez y al cerrarla ----- #
         self._first_show = True
         self._closing = False
         

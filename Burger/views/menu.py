@@ -39,7 +39,7 @@ class MenuView(QWidget):
         self.subtitulo_label = QLabel("¡nombre!")
         self.subtitulo_label.setObjectName("subtitulo")
         self.subtitulo_label.setAlignment(Qt.AlignCenter)
-        self.subtitulo_label.setContentsMargins(0, 0, 0, 10)
+        self.subtitulo_label.setContentsMargins(0, 0, 0, 5)
         
         # ----- Añado todo al layout ----- #
         titulo_layout = QVBoxLayout()
