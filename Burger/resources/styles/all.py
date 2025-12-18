@@ -108,4 +108,8 @@ general = """
             font-size: 16px;
             font-family: Poppins;
         }
+        QDoubleSpinBox {
+            background: white;
+            color: black;
+        }
 """

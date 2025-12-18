@@ -172,3 +172,10 @@ class PedidosView(QWidget):
         # conectar botones a las señales públicas
         self.btn_atras.clicked.connect(self.retroceder.emit)
         self.btn_confirmar.clicked.connect(self.confirmar_pedido.emit)
+        
+    def clean(self):
+        self.nombre_cliente.clear()
+        self.combo_simple.clear()
+        self.combo_doble.clear()
+        self.combo_triple.clear()
+        self.postre_flan.clear()

@@ -35,7 +35,7 @@ class ControladorMain:
         ui.menu.cerrar_turno.connect(self.terminar_turno)
         
         # ------ Conexiones PedidosView ------ #
-        ui.pedidos.retroceder.connect(lambda: self.cambiar_frame(ui.pedidos, ui.menu))
+        ui.pedidos.retroceder.connect(self.volver_menu)
         ui.pedidos.confirmar_pedido.connect(self.tomar_pedido)
     
     def login_usuario(self, usuario, contrasena):
@@ -70,6 +70,10 @@ class ControladorMain:
             
     def _animacion_finalizada(self):
         self.animado = False
+    
+    def volver_menu(self):
+        self.cambiar_frame(self.ui.pedidos, self.ui.menu)
+        self.ui.pedidos.clean()
         
     def terminar_turno(self):
         confirm = CloseShiftMessage(self.ui)
@@ -77,47 +81,32 @@ class ControladorMain:
             self.cambiar_frame(self.ui.menu, self.ui.inicio)
             
     def tomar_pedido(self):
-        pedido = PedidosView(self.ui.pedidos)
-        datos_de_pedido = DatosPedidos(self.ui.pedidos, self.ui)
         
-        if len(pedido.nombre_cliente.text()) < 3:
+        cantidades = [
+            int(self.ui.pedidos.combo_simple.text() or 0),
+            int(self.ui.pedidos.combo_doble.text() or 0),
+            int(self.ui.pedidos.combo_triple.text() or 0),
+            int(self.ui.pedidos.postre_flan.text() or 0)
+            ]
+        
+        total = cantidades[0] * 5 + cantidades[1] * 6 + cantidades[2] * 7 + cantidades[3] * 2
+        
+        datos_de_pedido = DatosPedidos(self.ui.pedidos, total, self.ui)
+        
+        if len(self.ui.pedidos.nombre_cliente.text()) < 3:
             datos_de_pedido.error_nombre()
         
-
+        elif not re.match(r"^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$", self.ui.pedidos.nombre_cliente.text()):
+            datos_de_pedido.error_nombre()
         
-        datos_de_pedido.exec()
-
-        
-        
-""""      
-    def tomar_pedido(self, datos):
-        if len(datos["Cliente"]) < 3:
-            return {"Error" : "El nombre del cliente no es válido."}
-        
-        if not re.match(r"^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$", datos["Cliente"]):
-            return {"Bien" : False, "Error" : "El nombre contiene carácteres invalidos."}
-        
-        cantidad = {
-            "Simple" : datos["Combo1"],
-            "Doble" : datos["Combo2"],
-            "Triple" : datos["Combo3"],
-            "Postre" : datos["Postre"]}
-        
-        if sum(cantidad.values()) == 0:
-            return {"Bien" : False, "Error" : "El pedido no puede estar vacío."}
-
-        precios = {
-            "Simple" : 5,
-            "Doble" : 6,
-            "Triple" : 7,
-            "Postre" : 2
-        }
-        
-        total = sum(cantidad[c] * precios[c] for c in cantidad)
-        self.total = total
-        
-        resultado = self.tomar_pedido(datos)
-        if resultado["Bien"]:
-            self.ui.setup_resumen(self.total)
-        
-"""        
+        elif sum(cantidades) == 0:
+            datos_de_pedido.error_pedido()    
+            
+        else:
+            datos_de_pedido.exec()
+            
+        if datos_de_pedido.exec():
+            if datos_de_pedido.datos.efectivo.isChecked():
+                if datos_de_pedido.monto_cliente.value() < total:
+                    datos_de_pedido.error_monto()
+                    return
