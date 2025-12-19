@@ -10,10 +10,10 @@ general = """
         }
         #frame_decorado {
             background: qlineargradient(
-            spread:pad, x1:0, y1:0, x2:0, y2:1,
-            stop:0 #fff8e6,
-            stop:1 #ffffff
-            );
+                spread:pad, x1:0, y1:0, x2:0, y2:1,
+                stop:0 #fff8e6,
+                stop:1 #ffffff
+                );
         border-radius: 20px;
             border: 1.5px solid black;
         }
@@ -111,5 +111,44 @@ general = """
         QDoubleSpinBox {
             background: white;
             color: black;
+            border-color: black;
+        }
+        QDialog {
+            background: qlineargradient(
+                x1:0, y1:0, x2:1, y2:1,
+                stop:0 mediumaquamarine,
+                stop:1 paleturquoise);
+        }
+        #carta_resumen {
+            background: qlineargradient(
+                spread:pad, x1:0, y1:0, x2:0, y2:1,
+                stop:0 #fff8e6,
+                stop:1 #ffffff
+                );
+            border-radius: 18px;
+            border: 1px solid black;
+        }
+        #carta_resumen QLabel {
+                color: #1f3d36;
+        }
+        #titulo_dialogo {
+            background: qlineargradient(
+                spread:pad, x1:0, y1:0, x2:0, y2:1,
+                stop:0 #fff8e6,
+                stop:1 #ffffff
+                );
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px 16px;
+            border-radius: 14px;
+            border: 1px solid black;
+        }
+        #texto_monto_cliente {
+            background: qlineargradient(
+                spread:pad, x1:0, y1:0, x2:0, y2:1,
+                stop:0 #fff8e6,
+                stop:1 #ffffff
+                );
+            border-radius: 4px;
         }
 """
