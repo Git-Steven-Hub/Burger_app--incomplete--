@@ -14,7 +14,7 @@ estilos_boton = general + """
             padding-top: 6px;
             padding-bottom: 10px;
             background-color: gray;
-            border: 2px solid rgba(255,255,255,0.35);
+            border: 1px solid rgba(255,255,255,0.35);
         }
         QPushButton:pressed {
             background-color: darkgray;

@@ -91,22 +91,26 @@ class ControladorMain:
         
         total = cantidades[0] * 5 + cantidades[1] * 6 + cantidades[2] * 7 + cantidades[3] * 2
         
-        datos_de_pedido = DatosPedidos(self.ui.pedidos, total, self.ui)
-        
         if len(self.ui.pedidos.nombre_cliente.text()) < 3:
-            datos_de_pedido.error_nombre()
+            DatosPedidos(self.ui.pedidos, total, self.ui).error_nombre()
+            return
         
-        elif not re.match(r"^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$", self.ui.pedidos.nombre_cliente.text()):
-            datos_de_pedido.error_nombre()
+        if not re.match(r"^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$", self.ui.pedidos.nombre_cliente.text()):
+            DatosPedidos(self.ui.pedidos, total, self.ui).error_nombre()
+            return
         
-        elif sum(cantidades) == 0:
-            datos_de_pedido.error_pedido()    
+        if sum(cantidades) == 0:
+            DatosPedidos(self.ui.pedidos, total, self.ui).error_pedido()
+            return   
             
-        else:
-            datos_de_pedido.exec()
+        datos = DatosPedidos(self.ui.pedidos, total, self.ui)
+        abrir = datos.exec()
+        
+        if not abrir:
+            return
             
-        if datos_de_pedido.exec():
-            if datos_de_pedido.datos.efectivo.isChecked():
-                if datos_de_pedido.monto_cliente.value() < total:
-                    datos_de_pedido.error_monto()
-                    return
+        if self.ui.pedidos.efectivo.isChecked():
+            monto = datos.monto_cliente.value()
+            vuelto = monto - total
+            print(f"Vuelto: {vuelto:.2f}")
+            
