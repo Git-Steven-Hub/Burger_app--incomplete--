@@ -109,9 +109,22 @@ general = """
             font-family: Poppins;
         }
         QDoubleSpinBox {
-            background: white;
-            color: black;
-            border-color: black;
+            background: #f4fff9;
+            color: #1f3d36;
+            border: 1px solid mediumaquamarine;
+            border-radius: 5px;
+            padding: 6px 8px;
+            font-size: 15px;
+            selection-background-color: mediumaquamarine;
+            selection-color: black;
+        }
+        QDoubleSpinBox:focus {
+            border: 2px solid drakgreen;
+            background-color: #eaffea;
+        }
+        QDoubleSpinBox:disabled {
+            background-color: #e0eee8;
+            color: #6b8f85;
         }
         QDialog {
             background: qlineargradient(
@@ -150,5 +163,6 @@ general = """
                 stop:1 #ffffff
                 );
             border-radius: 4px;
+            border: 1px solid black;
         }
 """
