@@ -7,6 +7,7 @@ class DatosPedidos(QDialog):
         
         self.datos = pedidos_view
         self.total = total
+        self.vuelto = 0
         
         self.setWindowTitle("Confirmar pedido")
 
@@ -19,6 +20,7 @@ class DatosPedidos(QDialog):
         botones.rejected.connect(self.reject)
         
         self.botones = botones
+        self.nombre = self.datos.nombre_cliente.text().capitalize()
         
         forma_pago = ("Efectivo" if self.datos.efectivo.isChecked() else "Transferencia")
         
@@ -39,7 +41,7 @@ class DatosPedidos(QDialog):
                 <span style="font-size: 18px; font-weight: 600;">
                     Cliente
                 </span><br>
-                {self.datos.nombre_cliente.text().capitalize()}
+                {self.nombre}
             <hr style="
                 border: none;
                 border-top: 1px solid rgba(31, 61, 53, 0.15);
@@ -114,12 +116,6 @@ class DatosPedidos(QDialog):
             self.monto_cliente.lineEdit().selectAll()
             return False
         return super().eventFilter(obj, event)
-    
-    def error_nombre(self):
-        QMessageBox.warning(self, "Error", "Nombre no válido.")
-        
-    def error_pedido(self):
-        QMessageBox.warning(self, "Error", "El pedido no puede estar vacío.")
         
     def validar_monto(self):
         boton_ok = self.botones.button(QDialogButtonBox.Ok)

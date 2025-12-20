@@ -4,6 +4,7 @@ from Burger.animations.transitions import fade_slide
 from Burger.widgets.close_shift import CloseShiftMessage
 from Burger.widgets.auth_dialog import EnterAdmin
 from Burger.widgets.datos_pedidos import DatosPedidos
+from Burger.widgets.messages import Messages
 import re
 
 # ------ Creo la clase controladora (lógica) ------ #
@@ -92,25 +93,31 @@ class ControladorMain:
         total = cantidades[0] * 5 + cantidades[1] * 6 + cantidades[2] * 7 + cantidades[3] * 2
         
         if len(self.ui.pedidos.nombre_cliente.text()) < 3:
-            DatosPedidos(self.ui.pedidos, total, self.ui).error_nombre()
+            Messages.error_nombre(self.ui)
             return
         
         if not re.match(r"^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$", self.ui.pedidos.nombre_cliente.text()):
-            DatosPedidos(self.ui.pedidos, total, self.ui).error_nombre()
+            Messages.error_nombre(self.ui)
             return
         
         if sum(cantidades) == 0:
-            DatosPedidos(self.ui.pedidos, total, self.ui).error_pedido()
+            Messages.error_pedido(self.ui)
             return   
             
         datos = DatosPedidos(self.ui.pedidos, total, self.ui)
         abrir = datos.exec()
         
         if not abrir:
-            return
+            return 
             
         if self.ui.pedidos.efectivo.isChecked():
             monto = datos.monto_cliente.value()
             vuelto = monto - total
-            print(f"Vuelto: {vuelto:.2f}")
-            
+            nombre = (self.ui.pedidos.nombre_cliente.text().capitalize())
+            self.ui.pedidos.clean()
+            Messages.pedido_finalizado_efectivo(self.ui, nombre, vuelto)
+        
+        if self.ui.pedidos.transferencia.isChecked():
+            nombre = (self.ui.pedidos.nombre_cliente.text().capitalize())
+            self.ui.pedidos.clean()
+            Messages.pedido_finalizado_transferencia(self.ui, nombre)
