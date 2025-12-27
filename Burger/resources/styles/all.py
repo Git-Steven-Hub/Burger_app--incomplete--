@@ -72,6 +72,14 @@ general = """
             color: gray;
             font-style: italic;
         }
+        QLineEdit[monto="ok"] {
+            border: 2px solid darkgreen;
+            background-color: #eaffea;
+        }
+        QlineEdit[monto="max"]{
+            border: 2px solid #c0392b;
+            background-color: #fdecea;
+        }
         QGroupBox {
             QFrame {
                 background-color: transparent;
@@ -164,5 +172,13 @@ general = """
                 );
             border-radius: 4px;
             border: 1px solid black;
+        }
+        QToolTip {
+            background-color: #fdecea;
+            color: #c0392b;
+            border: 1px solid #c0392b;
+            border-radius: 2px;
+            padding: 2px 4px;
+            font-weight: bold;
         }
 """

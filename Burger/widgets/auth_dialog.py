@@ -1,6 +1,7 @@
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QLineEdit, QDialogButtonBox, QMessageBox
+# ----- Importo las librerías necesarias ----- #
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QLineEdit, QDialogButtonBox
 
-# ----- Creo la ventana para entrar al administrador----- #
+# ----- Creo la ventana para entrar al administrador ----- #
 class EnterAdmin(QDialog):
     def __init__(self, parent: QDialog = None):
         super().__init__(parent)
@@ -36,6 +37,3 @@ class EnterAdmin(QDialog):
         layout.addWidget(self.admin_user)
         layout.addWidget(self.admin_pass)
         layout.addWidget(botones)
-    
-    def out(self):
-        QMessageBox.warning(self, "Error", "Usuario o contraseña erróneas.")

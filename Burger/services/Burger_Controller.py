@@ -1,5 +1,5 @@
 # ------ Importo las librerías necesarias ------ #
-from Burger.views import InicioView, AdminView, MenuView, PedidosView
+from Burger.services.Burger_System import Sistema
 from Burger.animations.transitions import fade_slide
 from Burger.widgets.close_shift import CloseShiftMessage
 from Burger.widgets.auth_dialog import EnterAdmin
@@ -10,10 +10,11 @@ import re
 # ------ Creo la clase controladora (lógica) ------ #
 class ControladorMain:
     # ------ Creo el init tomando las vistas y el sistema ------ #
-    def __init__(self, views, sistema):
+    def __init__(self, views):
         # ------ Defino el ui y el sistema (además creo un bloqueador de animación para evitar bugs visuales) ------ #
         self.ui = views
-        self.sistema = sistema
+        self.sistema = Sistema()
+        self.sistema.connect()
         self.animado = False
         
         # ------ Llamo a las acciones ------ #
@@ -46,16 +47,22 @@ class ControladorMain:
         dialogo = EnterAdmin(self.ui)
 
         if dialogo.exec():
-            if dialogo.admin_user.text() == "admin" and dialogo.admin_pass.text() == "admin123":
+            nombre = dialogo.admin_user.text()
+            contrasena = dialogo.admin_pass.text()
+            
+            autenticar = self.sistema.authenticate(nombre, contrasena)
+            
+            if autenticar and autenticar[0] == "admin":
                 self.cambiar_frame(self.ui.inicio, self.ui.admin)
             else:
-                dialogo.out()
+                Messages.admin_error(self.ui)
+            
     
     def cerrar_aplicacion(self):
         try:
-            self.sistema.apagar_sistema()
-        except:
-            pass
+            self.sistema.close_system()
+        except Exception as e:
+            print(e)
         self.ui.close()
     
     def cambiar_frame(self, frame_actual, frame_siguiente):

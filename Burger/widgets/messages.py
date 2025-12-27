@@ -1,6 +1,8 @@
 from PySide6.QtWidgets import QMessageBox
 
 class Messages:
+    def admin_error(parent):
+        QMessageBox.warning(parent, "Error", "Usuario o contraseña erróneas.")
     
     def error_nombre(parent):
         QMessageBox.warning(parent, "Error", "Nombre no válido.")

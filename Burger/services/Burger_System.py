@@ -14,6 +14,7 @@ class Sistema:
         self.connection = sqlite3.connect(self.ruta_db)
         self.cursor = self.connection.cursor()
         self.create()
+        self.admin_creation()
         
     # Creo ambas tablas de ventas y registros
     def create(self):
@@ -28,7 +29,8 @@ class Sistema:
                     "Combo D" INTEGER,
                     "Combo T" INTEGER,
                     Postre INTEGER,
-                    Total REAL
+                    Total REAL,
+                    Vuelto REAL
                     )
                 ''')
         self.cursor.execute('''
@@ -36,18 +38,34 @@ class Sistema:
                     ID INTEGER PRIMARY KEY AUTOINCREMENT,
                     Encargado TEXT(50),
                     Fecha TEXT(50),
-                    Evento TEXT(50),
+                    "Entrada/Salida" TEXT(50),
                     Caja REAL
-                    )
+                )
                 ''')
         self.cursor.execute('''
                 CREATE TABLE IF NOT EXISTS Usuarios (
                     ID INTEGER PRIMARY KEY AUTOINCREMENT,  
                     Nombre TEXT (50),
-                    Contraseña TEXT (50)
+                    Contraseña TEXT (50),
+                    Rol TEXT (20)
                 )
-                
                 ''')
+        self.connection.commit()
+    
+    def admin_creation(self):
+        self.cursor.execute("SELECT 1 FROM Usuarios WHERE Rol=?", ("admin",))
+        
+        if not self.cursor.fetchone():
+            self.cursor.execute("INSERT INTO Usuarios (Nombre, Contraseña, Rol) VALUES (?, ?, ?)", ("admin", "admin123", "admin"))
+
+            self.connection.commit()
+            
+    def authenticate(self, nombre, contrasena):
+        self.cursor.execute("SELECT Rol FROM Usuarios WHERE Nombre=? AND Contraseña=?", (nombre, contrasena))
+        return self.cursor.fetchone()
+    
+    def insert_new_user(self, nombre, contrasena):
+        self.cursor.execute("INSERT INTO Usuarios (Nombre, Contraseña, Rol) VALUES (?, ?, ?)", (nombre, contrasena, "Empleado"))
         self.connection.commit()
         
     # def insert_sales(self):
@@ -81,9 +99,39 @@ class Sistema:
     #     self.__init__()
     
         # Creo el método para apagar el sistema
-    def apagar_sistema(self):
+    def close_system(self):
         # Sumo todas las ventas del turno y las registro en el archivo de ventas
         # self.insert_register_out()
-        self.connection.commit()
-        self.connection.close()
-        exit()
+        if hasattr(self, "connection"):
+            self.connection.commit()
+            self.connection.close()
+            
+
+
+"""
+🔐 Extra importante (muy recomendado)
+
+No guardes contraseñas en texto plano.
+
+Cuando avances un poco más:
+
+Usá hashlib o bcrypt
+
+Guardá hashes, no contraseñas reales
+
+Ejemplo simple (más adelante):
+
+import hashlib
+hash = hashlib.sha256(password.encode()).hexdigest()
+
+📌 ¿Cuándo sí tendría sentido una tabla Admin aparte?
+
+Solo si:
+
+Los admins tienen muchísimos campos propios
+
+O permisos complejos independientes
+
+Para tu app actual → NO hace falta
+
+"""

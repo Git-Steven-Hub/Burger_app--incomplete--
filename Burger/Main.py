@@ -16,7 +16,7 @@ if __name__ == "__main__":
     burger_sistema.connect()
     
     burger_ui = Burger()
-    controlador = ControladorMain(burger_ui, burger_sistema)
+    controlador = ControladorMain(burger_ui)
     
     
     burger_ui.show()
