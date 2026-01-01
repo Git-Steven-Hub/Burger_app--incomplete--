@@ -59,14 +59,23 @@ class Sistema:
             self.cursor.execute("INSERT INTO Usuarios (Nombre, Contraseña, Rol) VALUES (?, ?, ?)", ("admin", "admin123", "admin"))
 
             self.connection.commit()
-            
+
+    def insert_new_user(self, nombre, contrasena):
+        self.cursor.execute("SELECT 1 FROM Usuarios WHERE Nombre=?", (nombre,))
+        
+        if self.cursor.fetchone():
+            return False
+        
+        self.cursor.execute("INSERT INTO Usuarios (Nombre, Contraseña, Rol) VALUES (?, ?, ?)", (nombre, contrasena, "Empleado"))
+        self.connection.commit()  
+        
+        return True
+          
     def authenticate(self, nombre, contrasena):
         self.cursor.execute("SELECT Rol FROM Usuarios WHERE Nombre=? AND Contraseña=?", (nombre, contrasena))
         return self.cursor.fetchone()
     
-    def insert_new_user(self, nombre, contrasena):
-        self.cursor.execute("INSERT INTO Usuarios (Nombre, Contraseña, Rol) VALUES (?, ?, ?)", (nombre, contrasena, "Empleado"))
-        self.connection.commit()
+
         
     # def insert_sales(self):
     #     self.cursor.executemany("INSERT INTO Ventas (ID, Encargado, Cliente, Fecha, Combo_S, Combo_D, Combo_T, Postre, Total) VALUES(NULL,?,?,?,?,?,?,?,?)", [(self.encargado, self.cliente, self.fecha, self.combo1, self.combo2, self.combo3, self.postre, self.total)])

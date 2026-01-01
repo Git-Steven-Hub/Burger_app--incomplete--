@@ -1,6 +1,12 @@
 from PySide6.QtWidgets import QMessageBox
 
 class Messages:
+    def usuario_existente(parent):
+        QMessageBox.warning(parent, "Error", "El usuario ya existe.")
+    
+    def usuario_creado(parent):
+        QMessageBox.information(parent, "Usuario creado", "El usuario se creó correctamente.")
+    
     def admin_error(parent):
         QMessageBox.warning(parent, "Error", "Usuario o contraseña erróneas.")
     

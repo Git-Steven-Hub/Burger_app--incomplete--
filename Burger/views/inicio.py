@@ -1,8 +1,8 @@
 # ------ Importo las librerías necesarias ------ #
 import os
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QFrame, QLabel, QPushButton, QLineEdit, QGridLayout, QHBoxLayout, QSpacerItem
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QFrame, QLabel, QPushButton, QLineEdit, QGridLayout, QHBoxLayout, QSpacerItem, QToolTip
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt, QSize, Signal
+from PySide6.QtCore import Qt, QSize, Signal, QPoint
 from Burger.widgets.background import BackgroundFrame
 from Burger.widgets.effects import apply_shadow_label
 
@@ -148,3 +148,19 @@ class InicioView(QWidget):
         self.btn_administrador.clicked.connect(self.ir_admin)
         self.btn_sesion.clicked.connect(lambda: self.iniciar_sesion.emit(self.usuario.text(), self.contrasena.text()))
         self.btn_usuario_nuevo.clicked.connect(lambda: self.nuevo_usuario.emit(self.line_nuevo_usuario.text(), self.nueva_contrasena.text()))
+        
+    def clear(self):
+        self.usuario.clear()
+        self.contrasena.clear()
+        self.line_nuevo_usuario.clear()
+        self.nueva_contrasena.clear()
+        
+    def tooltip_length(self):
+        pos = self.line_nuevo_usuario.mapToGlobal(self.line_nuevo_usuario.rect().topLeft() + QPoint(4, 10))
+        
+        QToolTip.showText(pos, "El nombre debe tener al menos 3 caracteres.", self.line_nuevo_usuario, self.line_nuevo_usuario.rect(), 1500)
+        
+    def tooltip_letters(self):
+        pos = self.line_nuevo_usuario.mapToGlobal(self.line_nuevo_usuario.rect().topLeft() + QPoint(4, 10))
+        
+        QToolTip.showText(pos, "Solo se admiten letras.", self.line_nuevo_usuario, self.line_nuevo_usuario.rect(), 1500)

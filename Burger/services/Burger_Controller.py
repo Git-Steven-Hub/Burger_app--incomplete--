@@ -25,7 +25,8 @@ class ControladorMain:
         
         # ------ Conexiones InicioView ------ #
         ui.inicio.ir_admin.connect(self.confirmar_admin)
-        ui.inicio.iniciar_sesion.connect(self.login_usuario)
+        ui.inicio.iniciar_sesion.connect(self.ir_menu)
+        ui.inicio.nuevo_usuario.connect(self.create_user)
         ui.inicio.btn_salir.clicked.connect(self.cerrar_aplicacion)
         
         # ------ Conexiones AdminView ------ #
@@ -40,8 +41,34 @@ class ControladorMain:
         ui.pedidos.retroceder.connect(self.volver_menu)
         ui.pedidos.confirmar_pedido.connect(self.tomar_pedido)
     
+    
+    
+    
+    def create_user(self, nombre, contrasena):
+        if len(nombre) < 3:
+            self.ui.inicio.tooltip_length()
+            return
+            
+        if not re.match(r"^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$", nombre):
+            self.ui.inicio.tooltip_letters()
+            return
+        
+        add = self.sistema.insert_new_user(nombre, contrasena)
+        
+        if add:
+            Messages.usuario_creado(self.ui)
+            self.ui.inicio.clear()
+        
+        if not add:
+            Messages.usuario_existente(self.ui)
+        
+    
     def login_usuario(self, usuario, contrasena):
         self.cambiar_frame(self.ui.inicio, self.ui.menu)
+        
+    def ir_menu(self):
+        self.cambiar_frame(self.ui.inicio, self.ui.menu)
+        self.ui.inicio.clear()
         
     def confirmar_admin(self):
         dialogo = EnterAdmin(self.ui)
@@ -54,6 +81,8 @@ class ControladorMain:
             
             if autenticar and autenticar[0] == "admin":
                 self.cambiar_frame(self.ui.inicio, self.ui.admin)
+                self.ui.inicio.clear()
+                
             else:
                 Messages.admin_error(self.ui)
             
@@ -61,8 +90,10 @@ class ControladorMain:
     def cerrar_aplicacion(self):
         try:
             self.sistema.close_system()
+            
         except Exception as e:
             print(e)
+            
         self.ui.close()
     
     def cambiar_frame(self, frame_actual, frame_siguiente):
@@ -78,6 +109,8 @@ class ControladorMain:
             
     def _animacion_finalizada(self):
         self.animado = False
+    
+
     
     def volver_menu(self):
         self.cambiar_frame(self.ui.pedidos, self.ui.menu)
