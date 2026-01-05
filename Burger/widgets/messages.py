@@ -7,8 +7,13 @@ class Messages:
     def usuario_creado(parent):
         QMessageBox.information(parent, "Usuario creado", "El usuario se creó correctamente.")
     
-    def admin_error(parent):
-        QMessageBox.warning(parent, "Error", "Usuario o contraseña erróneas.")
+    def error_usuario(parent):
+        msg = QMessageBox(parent)
+        msg.setIcon(QMessageBox.Warning)
+        msg.setWindowTitle("Error")
+        msg.setText("Usuario o contraseña incorrectos.")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec()
     
     def error_nombre(parent):
         QMessageBox.warning(parent, "Error", "Nombre no válido.")

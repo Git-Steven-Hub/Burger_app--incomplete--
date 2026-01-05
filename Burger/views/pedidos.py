@@ -31,7 +31,7 @@ class PedidosView(QWidget):
         root_layout.addWidget(self.frame_opciones, stretch=3)
         
         # ----- Creo el título y le asigno un nombre para el estilo ----- #
-        self.titulo_label = QLabel("SECCION PEDIDOS\nLA BURGUESIA")
+        self.titulo_label = QLabel("¡SECCION PEDIDOS!\nLA BURGUESIA")
         self.titulo_label.setObjectName("titulo")
         self.titulo_label.setAlignment(Qt.AlignCenter)
         
@@ -162,17 +162,22 @@ class PedidosView(QWidget):
         self.frame_opciones_layout.addLayout(botones_layout)
         self.frame_opciones_layout.addStretch()
 
-        # ----- Vista para apretar "Enter" y que salte al siguiento campo de texto ----- #
+        # ------ Manejo de eventos con teclado para mejor experiencia ------ #
         self.nombre_cliente.returnPressed.connect(lambda: self.combo_simple.setFocus())
         self.combo_simple.returnPressed.connect(lambda: self.combo_doble.setFocus())
         self.combo_doble.returnPressed.connect(lambda: self.combo_triple.setFocus())
         self.combo_triple.returnPressed.connect(lambda: self.postre_flan.setFocus())
         self.postre_flan.returnPressed.connect(self.btn_confirmar.click)
 
-        # conectar botones a las señales públicas
+        # ------ Manejo de foco para mejor experiencia ------ #
+        self.btn_atras.setFocusPolicy(Qt.NoFocus)
+        self.btn_confirmar.setFocusPolicy(Qt.NoFocus)
+
+        # ----- Conecto los botones a sus respectivas señales ----- #
         self.btn_atras.clicked.connect(self.retroceder.emit)
         self.btn_confirmar.clicked.connect(self.confirmar_pedido.emit)
         
+    # ----- Creo la función para limpiar los campos de texto ----- #    
     def clean(self):
         self.nombre_cliente.clear()
         self.combo_simple.clear()

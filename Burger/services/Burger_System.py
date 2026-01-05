@@ -1,23 +1,27 @@
-# Sistema de la app
-# Importo las librerías necesarias
+# ------ Importo las librerías necesarias ------ #
 import os
 import sqlite3
 from datetime import datetime
 
-# Creo la clase principal
+# ------ Creo la clase sistema (datos) ------ #
 class Sistema:
+    # ------ Al iniciar el sistema se guarda todo en su respectivo directorio ------ #
     def __init__(self):
         bbdd_directorio = os.path.dirname(os.path.abspath(__file__))
         self.ruta_db = os.path.join(bbdd_directorio, "burgerdata.db")
-        
+    
+    # ------ Creo la conexión con la base de datos ------ #
     def connect(self):
         self.connection = sqlite3.connect(self.ruta_db)
         self.cursor = self.connection.cursor()
+        # ------ Llamo a la creación de las tablas principales ------ #
         self.create()
+        # ------ Además al iniciar se crea el admin inicial ------ #
         self.admin_creation()
         
-    # Creo ambas tablas de ventas y registros
+    # ------ Creo la función que crea todas las tablas principales ------ #
     def create(self):
+        # ------ Si la tabla de ventas no existe, se crea ------ #
         self.cursor.execute('''
                CREATE TABLE IF NOT EXISTS Ventas (
                     ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,6 +37,7 @@ class Sistema:
                     Vuelto REAL
                     )
                 ''')
+        # ------ Si la tabla de registros no existe, se crea ------ #
         self.cursor.execute('''
                CREATE TABLE IF NOT EXISTS Registros (
                     ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,6 +47,7 @@ class Sistema:
                     Caja REAL
                 )
                 ''')
+        # ------ Si la tabla de usuarios no existe, se crea ------ #
         self.cursor.execute('''
                 CREATE TABLE IF NOT EXISTS Usuarios (
                     ID INTEGER PRIMARY KEY AUTOINCREMENT,  
@@ -50,29 +56,46 @@ class Sistema:
                     Rol TEXT (20)
                 )
                 ''')
+        
+        # ------ Se guardan los cambios ------ #
         self.connection.commit()
     
+    # ------ Creo la función para crear al admin ------ #
     def admin_creation(self):
+        # ------ Se verifica si ya existe el admin ------ #
         self.cursor.execute("SELECT 1 FROM Usuarios WHERE Rol=?", ("admin",))
         
+        # ------ Si el admin no existe lo crea de forma básica ------ #
         if not self.cursor.fetchone():
             self.cursor.execute("INSERT INTO Usuarios (Nombre, Contraseña, Rol) VALUES (?, ?, ?)", ("admin", "admin123", "admin"))
 
+            # ------ Se guardan los cambios ------ #
             self.connection.commit()
 
+    # ------ Creo la función para insertar nuevos usuarios ------ #
     def insert_new_user(self, nombre, contrasena):
+        # ------ Verifico si el usuario ya existe ------ #
         self.cursor.execute("SELECT 1 FROM Usuarios WHERE Nombre=?", (nombre,))
         
+        # ------ Si el usuario no existe lo crea ------ #
         if self.cursor.fetchone():
             return False
         
+        # ------ Lo inserta con el rol predeterminado el cual es el empleado ------ #
         self.cursor.execute("INSERT INTO Usuarios (Nombre, Contraseña, Rol) VALUES (?, ?, ?)", (nombre, contrasena, "Empleado"))
+        
+        # ------ Se guardan los cambios ------ #
         self.connection.commit()  
         
+        # ------ Se retorna verdadero para indicar que se creó correctamente ------ #
         return True
-          
+    
+    # ------ Creo la función para autenticar usuarios, sea el admin o empleado ------ #
     def authenticate(self, nombre, contrasena):
+        # ------ Selecciono el rol del usuario si existe ------ #
         self.cursor.execute("SELECT Rol FROM Usuarios WHERE Nombre=? AND Contraseña=?", (nombre, contrasena))
+        
+        # ------ Devuelve el rol del usuario si existe ------ #
         return self.cursor.fetchone()
     
 

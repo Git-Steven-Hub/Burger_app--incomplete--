@@ -36,7 +36,7 @@ class MenuView(QWidget):
         self.titulo_label.setAlignment(Qt.AlignCenter)
         
         # ----- Creo el subtitulo y le asigno un nombre para el estilo ----- #
-        self.subtitulo_label = QLabel("¡nombre!")
+        self.subtitulo_label = QLabel()
         self.subtitulo_label.setObjectName("subtitulo")
         self.subtitulo_label.setAlignment(Qt.AlignCenter)
         self.subtitulo_label.setContentsMargins(0, 0, 0, 5)
@@ -101,18 +101,21 @@ class MenuView(QWidget):
         
         # ----- Agrego los botones en su posición correspondiente ----- #
         columnas.addWidget(self.btn_iniciar_pedido, 0, 0, alignment=Qt.AlignCenter)
-        # ----- Separación ----- #
         columnas.addWidget(self.btn_estado_turno, 1, 0, alignment=Qt.AlignCenter)
-        # ----- Separación ----- #
         columnas.addWidget(self.btn_historial_turno, 2, 0, alignment=Qt.AlignCenter)
-        # ----- Separación ----- #
         columnas.addWidget(self.btn_cambiar_contrasena, 3, 0, alignment=Qt.AlignCenter)
-        # ----- Separación ----- #
         columnas.addWidget(self.btn_terminar_turno, 4, 0, alignment=Qt.AlignCenter)
         
         # ----- Agrego todo al layout principal ---- #
         self.frame_botones.addLayout(columnas)
 
-        # conectar la señal pública a la acción del botón
+        # ------ Manejo de foco para mejor experiencia ------ #
+        self.btn_iniciar_pedido.setFocusPolicy(Qt.NoFocus)
+        self.btn_estado_turno.setFocusPolicy(Qt.NoFocus)
+        self.btn_historial_turno.setFocusPolicy(Qt.NoFocus)
+        self.btn_cambiar_contrasena.setFocusPolicy(Qt.NoFocus)
+        self.btn_terminar_turno.setFocusPolicy(Qt.NoFocus)
+
+        # ------ Conecto las señales a sus respectivos ------ #
         self.btn_terminar_turno.clicked.connect(self.cerrar_turno.emit)
         self.btn_iniciar_pedido.clicked.connect(self.iniciar_pedido.emit)

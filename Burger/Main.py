@@ -1,6 +1,6 @@
 # Importo las librerías necesarias
 import sys, warnings
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QStyleFactory
 from PySide6.QtCore import QTranslator, QLocale, QLibraryInfo
 
 # Usar imports explícitos del paquete `Burger`.
@@ -11,6 +11,7 @@ from Burger.services.Burger_Controller import ControladorMain
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setStyle(QStyleFactory.create("Fusion"))
     
     burger_sistema = Sistema()
     burger_sistema.connect()

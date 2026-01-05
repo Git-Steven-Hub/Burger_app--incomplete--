@@ -104,9 +104,6 @@ general = """
             background-color: mediumaquamarine;
             border-radius: 12px;
         }
-        QMessageBox * {
-            background-color: transparent;
-        }
         QMessageBox QLabel#qt_msgbox_label {
             font-weight: bold;
             font-size: 18px;
@@ -115,6 +112,7 @@ general = """
             color: black;
             font-size: 16px;
             font-family: Poppins;
+            background-color: transparent;
         }
         QDoubleSpinBox {
             background: #f4fff9;

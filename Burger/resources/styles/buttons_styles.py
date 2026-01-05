@@ -10,6 +10,10 @@ estilos_boton = general + """
             font-family: Poppins;
             font-size: 16px;
         }
+        QPushButton:focus {
+            outline: none;
+            border: 2px solid transparent
+        }
         QPushButton:hover {
             padding-top: 6px;
             padding-bottom: 10px;
@@ -98,24 +102,6 @@ estilos_boton = general + """
         #boton_admin:pressed {
             background-color: #004d4d;
         }
-        QMessageBox QPushButton {
-            background-color: mediumseagreen;
-            border: 2px solid forestgreen;
-            border-radius: 4px;
-            padding: 6px 12px;
-            font-weight: bold;
-        }
-        QMessageBox QPushButton:hover {
-            background-color: seagreen;
-            border-color: seagreen;
-            padding-top: 4px;
-            padding-bottom: 8px;
-        }
-        QMessageBox QPushButton:pressed {
-            background-color: darkgreen;
-            padding-top: 8px;
-            padding-bottom: 4px;
-        }
         QRadioButton {
             font-size: 14px;
             color: black;
@@ -134,5 +120,28 @@ estilos_boton = general + """
         QRadioButton::indicator:checked {
             background: mediumseagreen;
             border: 2px solid forestgreen;
+        }
+        QMessageBox QPushButton {
+            background-color: mediumseagreen;
+            border: 2px solid forestgreen;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-weight: bold;
+        }
+        QMessageBox QPushButton:default {
+            border: 2px solid forestgreen;
+        }
+        QMessageBox QPushButton:focus {
+            outline: none;
+            border: 2px solid forestgreen;
+        }
+        QMessageBox QPushButton:hover {
+            background-color: seagreen;
+            border-color: seagreen;
+        }
+        QMessageBox QPushButton:pressed {
+            background-color: darkgreen;
+            padding-top: 8px;
+            padding-bottom: 4px;
         }
 """

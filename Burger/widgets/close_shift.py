@@ -9,7 +9,12 @@ class CloseShiftMessage(QMessageBox):
         self.setIcon(QMessageBox.Warning)
  
         self.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        self.setDefaultButton(QMessageBox.No)
+        self.setDefaultButton(QMessageBox.NoButton)
+        
+        for btn in self.buttons():
+            btn.setDefault(False)
+            btn.setAutoDefault(False)
+            btn.setFocusPolicy(Qt.NoFocus)
         
         efecto = QGraphicsDropShadowEffect()
         efecto.setBlurRadius(0)

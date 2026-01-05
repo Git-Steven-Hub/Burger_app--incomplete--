@@ -1,4 +1,5 @@
 # ----- Importo las librerías necesarias ----- #
+from Burger.widgets.tooltips_ui import show_tooltip as tooltip
 from Burger.widgets.input_dinero import DineroLineEdit
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QDialogButtonBox, QHBoxLayout, QSizePolicy, QFrame, QToolTip
 from PySide6.QtCore import Qt, QPoint
@@ -135,6 +136,4 @@ class DatosPedidos(QDialog):
         
         # ----- Si el monto del cliente llega al limite envía un aviso ----- #
         if self.monto_cliente.value() == monto_max:
-            pos = self.monto_cliente.mapToGlobal(self.monto_cliente.rect().topLeft() + QPoint(-6, 8))
-            
-            QToolTip.showText(pos, "Máximo alcanzado.", self.monto_cliente)
+            tooltip(self.monto_cliente, "Máximo alcanzado.", offset=QPoint(-6, 8))

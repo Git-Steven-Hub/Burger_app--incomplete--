@@ -1,8 +1,9 @@
 # ------ Importo las librerías necesarias ------ #
 import os
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QFrame, QLabel, QPushButton, QLineEdit, QGridLayout, QHBoxLayout, QSpacerItem, QToolTip
-from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt, QSize, Signal, QPoint
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QFrame, QLabel, QPushButton, QLineEdit, QGridLayout, QHBoxLayout, QSpacerItem
+from PySide6.QtGui import QIcon, QAction
+from PySide6.QtCore import Qt, QSize, Signal
+from Burger.widgets.tooltips_ui import show_tooltip as tooltip
 from Burger.widgets.background import BackgroundFrame
 from Burger.widgets.effects import apply_shadow_label
 
@@ -36,7 +37,7 @@ class InicioView(QWidget):
         root_layout.addWidget(self.frame_opciones, stretch=3)
         
         # ----- Creo el título y le asigno su nombre para el estilo ----- #
-        self.titulo_label = QLabel("¡BIENVENIDO NUEVAMENTE!\n LA BURGUESIA ")
+        self.titulo_label = QLabel("¡BIENVENIDO NUEVAMENTE!\n LA BURGUESIA")
         self.titulo_label.setObjectName("titulo")
         self.titulo_label.setAlignment(Qt.AlignCenter)
         QSpacerItem(20, 40)
@@ -68,31 +69,31 @@ class InicioView(QWidget):
         self.opciones_layout = QVBoxLayout(self.frame_opciones)
         
         # ------ Creo el apartado que se encarga de encontrar todos los iconos ------ #
-        icons_dir = os.path.join(os.path.dirname(__file__), "../resources/icons")
+        self.icons_dir = os.path.join(os.path.dirname(__file__), "../resources/icons")
         
         # ----- Creo el botón de inicio y le asigno nombre ----- #
         self.btn_sesion = QPushButton("Iniciar sesión")
-        self.btn_sesion.setIcon(QIcon(os.path.join(icons_dir, "login.png")))
+        self.btn_sesion.setIcon(QIcon(os.path.join(self.icons_dir, "login.png")))
         self.btn_sesion.setIconSize(QSize(25, 25))
         self.btn_sesion.setObjectName("id1")
         self.btn_sesion.setFixedWidth(380)
         
         # ----- Creo el botón de usuario nuevo y le asigno nombre----- #
         self.btn_usuario_nuevo = QPushButton("Nuevo usuario")
-        self.btn_usuario_nuevo.setIcon(QIcon(os.path.join(icons_dir, "nuevo usuario.png")))
+        self.btn_usuario_nuevo.setIcon(QIcon(os.path.join(self.icons_dir, "nuevo usuario.png")))
         self.btn_usuario_nuevo.setIconSize(QSize(25, 25))
         self.btn_usuario_nuevo.setObjectName("id2")
         self.btn_usuario_nuevo.setFixedWidth(380)
         
         # ----- Creo el botón para el administrador ----- #
         self.btn_administrador = QPushButton("Administrador")
-        self.btn_administrador.setIcon(QIcon(os.path.join(icons_dir, "admin.png")))
+        self.btn_administrador.setIcon(QIcon(os.path.join(self.icons_dir, "admin.png")))
         self.btn_administrador.setIconSize(QSize(25, 25))
         self.btn_administrador.setObjectName("boton_admin")
         
         # ----- Creo el botón de salir y le asigno nombre ----- #
         self.btn_salir = QPushButton("Salir")
-        self.btn_salir.setIcon(QIcon(os.path.join(icons_dir, "cerrar app.png")))
+        self.btn_salir.setIcon(QIcon(os.path.join(self.icons_dir, "cerrar app.png")))
         self.btn_salir.setIconSize(QSize(25, 25))
         self.btn_salir.setObjectName("id3")
         
@@ -103,6 +104,13 @@ class InicioView(QWidget):
         self.contrasena.setPlaceholderText("Contraseña")
         self.contrasena.setEchoMode(QLineEdit.Password)
         
+        # ----- Creo el botón para ver la contraseña ----- #
+        self.ver_contrasena = QAction(QIcon(os.path.join(self.icons_dir, "eye closed icon.png")), "", self.contrasena)
+        self.ver_contrasena.setCheckable(True)
+        
+        # ----- Agrego el botón de ver la contraseña ----- #
+        self.contrasena.addAction(self.ver_contrasena, QLineEdit.TrailingPosition)
+
         # ----- Creo los QLineEdit para el nuevo usuario ----- #
         self.line_nuevo_usuario = QLineEdit()
         self.line_nuevo_usuario.setPlaceholderText("Crear usuario")
@@ -137,30 +145,54 @@ class InicioView(QWidget):
         # ----- Separación ----- #
         columnas.addWidget(self.nueva_contrasena, 5, 1, alignment=Qt.AlignCenter)
         self.nueva_contrasena.setFixedWidth(350)
-        self.nueva_contrasena.setContentsMargins(0, 0, 0, 5)
+        self.nueva_contrasena.setContentsMargins(0, 0, 0, 0)
         
         # ----- Agrego los botones al frame ----- #
         columnas.addLayout(columnas2, 7, 0, 1, 3)
         self.opciones_layout.addLayout(columnas)
         self.opciones_layout.addStretch()
         
+        # ------ Manejo de eventos con teclado para mejor experiencia ------ #
+        self.usuario.returnPressed.connect(lambda: self.contrasena.setFocus())
+        self.contrasena.returnPressed.connect(self.btn_sesion.click)
+        self.line_nuevo_usuario.returnPressed.connect(lambda: self.nueva_contrasena.setFocus())
+        self.nueva_contrasena.returnPressed.connect(self.btn_usuario_nuevo.click)
+        
+        # ------ Manejo de foco para mejor experiencia ------ #
+        self.btn_sesion.setFocusPolicy(Qt.NoFocus)
+        self.btn_usuario_nuevo.setFocusPolicy(Qt.NoFocus)
+        self.btn_administrador.setFocusPolicy(Qt.NoFocus)
+        self.btn_salir.setFocusPolicy(Qt.NoFocus)
+
         # ----- Conecto los botones a sus respectivas señales ----- #
         self.btn_administrador.clicked.connect(self.ir_admin)
         self.btn_sesion.clicked.connect(lambda: self.iniciar_sesion.emit(self.usuario.text(), self.contrasena.text()))
         self.btn_usuario_nuevo.clicked.connect(lambda: self.nuevo_usuario.emit(self.line_nuevo_usuario.text(), self.nueva_contrasena.text()))
-        
+        self.ver_contrasena.toggled.connect(self.toggle_password)
+
+    # ----- Creo la función para limpiar los campos de texto ----- #
     def clear(self):
         self.usuario.clear()
         self.contrasena.clear()
         self.line_nuevo_usuario.clear()
         self.nueva_contrasena.clear()
+    
+    # ----- Creo la función para mostrar y ocultar la contraseña ----- #
+    def toggle_password(self, visible):
+        if visible:
+            self.contrasena.setEchoMode(QLineEdit.Normal)
+            self.ver_contrasena.setIcon(QIcon(os.path.join(self.icons_dir, "eye open icon.png")))
         
+        else:
+            self.contrasena.setEchoMode(QLineEdit.Password)
+            self.ver_contrasena.setIcon(QIcon(os.path.join(self.icons_dir, "eye closed icon.png")))
+
+     # ----- Creo los tooltips para el nombre de usuario y para la contraseña ----- #
     def tooltip_length(self):
-        pos = self.line_nuevo_usuario.mapToGlobal(self.line_nuevo_usuario.rect().topLeft() + QPoint(4, 10))
-        
-        QToolTip.showText(pos, "El nombre debe tener al menos 3 caracteres.", self.line_nuevo_usuario, self.line_nuevo_usuario.rect(), 1500)
+        tooltip(self.line_nuevo_usuario, "El nombre de usuario debe tener al menos 3 caracteres.")
         
     def tooltip_letters(self):
-        pos = self.line_nuevo_usuario.mapToGlobal(self.line_nuevo_usuario.rect().topLeft() + QPoint(4, 10))
+        tooltip(self.line_nuevo_usuario, "Solo se admiten letras.")
         
-        QToolTip.showText(pos, "Solo se admiten letras.", self.line_nuevo_usuario, self.line_nuevo_usuario.rect(), 1500)
+    def tooltip_pass_length(self):
+        tooltip(self.nueva_contrasena, "La contraseña debe tener al menos 4 caracteres.")
