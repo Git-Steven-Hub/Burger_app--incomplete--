@@ -98,8 +98,18 @@ class Sistema:
         # ------ Devuelve el rol del usuario si existe ------ #
         return self.cursor.fetchone()
     
-
+    def change_password(self, nombre, contrasena, nueva_contrasena):
+        self.cursor.execute("SELECT 1 FROM Usuarios WHERE Nombre=? AND Contraseña=?", (nombre, contrasena))
         
+        if not self.cursor.fetchone():
+            return False
+
+        self.cursor.execute("UPDATE Usuarios SET Contraseña=? WHERE Nombre=?", (nueva_contrasena, nombre))
+        
+        self.connection.commit()
+        
+    
+    
     # def insert_sales(self):
     #     self.cursor.executemany("INSERT INTO Ventas (ID, Encargado, Cliente, Fecha, Combo_S, Combo_D, Combo_T, Postre, Total) VALUES(NULL,?,?,?,?,?,?,?,?)", [(self.encargado, self.cliente, self.fecha, self.combo1, self.combo2, self.combo3, self.postre, self.total)])
     #     self.connection.commit()

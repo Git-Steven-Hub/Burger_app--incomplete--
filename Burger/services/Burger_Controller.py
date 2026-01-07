@@ -5,16 +5,16 @@ from Burger.widgets.close_shift import CloseShiftMessage
 from Burger.widgets.auth_dialog import EnterAdmin
 from Burger.widgets.datos_pedidos import DatosPedidos
 from Burger.widgets.messages import Messages
+from Burger.widgets.change_pass import ChangePass
 import re
 
 # ------ Creo la clase controladora (lógica) ------ #
 class ControladorMain:
     # ------ Creo el init tomando las vistas y el sistema ------ #
-    def __init__(self, views):
+    def __init__(self, views, sistema):
         # ------ Defino el ui y el sistema (además creo un bloqueador de animación para evitar bugs visuales) ------ #
         self.ui = views
-        self.sistema = Sistema()
-        self.sistema.connect()
+        self.sistema = sistema
         self.animado = False
         
         # ------ Llamo a las acciones ------ #
@@ -37,6 +37,7 @@ class ControladorMain:
         # ------ Conexiones MenuView ------ #
         ui.menu.iniciar_pedido.connect(lambda: self.cambiar_frame(ui.menu, ui.pedidos))
         ui.menu.cerrar_turno.connect(self.terminar_turno)
+        ui.menu.cambiar_contrasena.connect(self.change_pass)
         
         # ------ Conexiones PedidosView ------ #
         ui.pedidos.retroceder.connect(self.volver_menu)
@@ -73,14 +74,14 @@ class ControladorMain:
         
     # ----- Creo la función que se encarga de iniciar sesión ----- #
     def login_usuario(self, nombre, contrasena):
-        
         # ----- Creo la variable que se encarga de autenticar el usuario ----- #
         autenticar = self.sistema.authenticate(nombre, contrasena)
         
         # ----- Si el usuario se comprueba correctamente se cambia el frame ----- #
         if autenticar and autenticar[0] == "Empleado":
-            nombre = nombre.capitalize()
-            self.ui.menu.subtitulo_label.setText(f"¡Encargado de turno {nombre}!")
+            self.nombre = nombre
+            self.contrasena = contrasena
+            self.ui.menu.subtitulo_label.setText(f"¡Encargado de turno {nombre.title()}!")
             self.cambiar_frame(self.ui.inicio, self.ui.menu)
             self.ui.inicio.clear()
         
@@ -89,6 +90,22 @@ class ControladorMain:
             Messages.error_usuario(self.ui)
             return
     
+    # ----- Creo la función para cambiar la contraseña del usuario ----- #
+    def change_pass(self):
+        # ----- LLamo al dialogo enviando el sistema y el nombre del usuario ----- #
+        dialogo = ChangePass(self.sistema, self.nombre, self.ui)
+
+        # ----- Si el dialogo no se ejecuta se devuelve ----- #
+        if not dialogo.exec():
+            return
+        
+        # ----- Al pasar la validación, tomo el nombre, las contraseñas y aplico el cambio ----- #
+        self.sistema.change_password(self.nombre, dialogo.old_pass.text(), dialogo.new_pass.text())
+        
+        # ----- Envío un mensaje de confirmación ----- #
+        Messages.contraseña(self.ui)
+
+
     # ----- Creo la función que se encarga de confirmar al administrador ----- #
     def confirmar_admin(self):
         dialogo = EnterAdmin(self.ui)

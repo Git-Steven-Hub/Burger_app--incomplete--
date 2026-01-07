@@ -8,6 +8,7 @@ from Burger.widgets.effects import apply_shadow_label
 
 class MenuView(QWidget):
     iniciar_pedido = Signal()
+    cambiar_contrasena = Signal()
     cerrar_turno = Signal()
     
     def __init__(self, parent=None):
@@ -119,3 +120,4 @@ class MenuView(QWidget):
         # ------ Conecto las señales a sus respectivos ------ #
         self.btn_terminar_turno.clicked.connect(self.cerrar_turno.emit)
         self.btn_iniciar_pedido.clicked.connect(self.iniciar_pedido.emit)
+        self.btn_cambiar_contrasena.clicked.connect(self.cambiar_contrasena.emit)
