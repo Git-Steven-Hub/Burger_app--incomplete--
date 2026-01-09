@@ -7,18 +7,15 @@ from Burger.widgets.tooltips_ui import show_tooltip as tooltip
 from Burger.widgets.background import BackgroundFrame
 from Burger.widgets.effects import apply_shadow_label
 
-# ------ Creo al clase para poder ser stackeada ------ #
 class InicioView(QWidget):
     ir_admin = Signal()
     iniciar_sesion = Signal(str, str)
     nuevo_usuario = Signal(str, str)
     
-    # ------ Creo el init ------ #
     def __init__(self, parent=None):
         super().__init__(parent)
         self._build_ui()
     
-    # ------ Creo el UI en el mismo widget ------ #
     def _build_ui(self):
         # ------ Creo la raíz ------ #
         root_layout = QVBoxLayout(self)
@@ -36,13 +33,12 @@ class InicioView(QWidget):
         root_layout.addWidget(self.frame_titulo, stretch=1)
         root_layout.addWidget(self.frame_opciones, stretch=3)
         
-        # ----- Creo el título y le asigno su nombre para el estilo ----- #
+        # ----- Creo el título y el subtitulo ----- #
         self.titulo_label = QLabel("¡BIENVENIDO NUEVAMENTE!\n LA BURGUESIA")
         self.titulo_label.setObjectName("titulo")
         self.titulo_label.setAlignment(Qt.AlignCenter)
         QSpacerItem(20, 40)
         
-        # ----- Creo el subtitulo y le agrego su estilo ----- #
         self.subtitulo_label = QLabel("¡Las mejores burguers!")
         self.subtitulo_label.setObjectName("subtitulo")
         self.subtitulo_label.setAlignment(Qt.AlignCenter)
@@ -53,8 +49,7 @@ class InicioView(QWidget):
         titulo_layout.addWidget(self.titulo_label)
         titulo_layout.addWidget(self.subtitulo_label)
         self.frame_titulo.setLayout(titulo_layout)
-        
-        # ----- Llamo a los botones para rellenar opciones_section ----- #
+
         self._setup_buttons_layout()
     
     # ------ Creo el evento para que se vean las sombras del título y del subtitulo ------ #
@@ -134,15 +129,12 @@ class InicioView(QWidget):
         columnas.addWidget(self.btn_sesion, 0, 1, alignment=Qt.AlignCenter)
         columnas.addWidget(self.usuario, 1, 1, alignment=Qt.AlignCenter)
         self.usuario.setFixedWidth(350)
-        # ----- Separación ----- #
         columnas.addWidget(self.contrasena, 2, 1, alignment=Qt.AlignCenter)
         self.contrasena.setFixedWidth(350)
         self.contrasena.setContentsMargins(0, 0, 0, 5)
-        # ----- Separación ----- #
         columnas.addWidget(self.btn_usuario_nuevo, 3, 1, alignment=Qt.AlignCenter)
         columnas.addWidget(self.line_nuevo_usuario, 4, 1, alignment=Qt.AlignCenter)
         self.line_nuevo_usuario.setFixedWidth(350)
-        # ----- Separación ----- #
         columnas.addWidget(self.nueva_contrasena, 5, 1, alignment=Qt.AlignCenter)
         self.nueva_contrasena.setFixedWidth(350)
         self.nueva_contrasena.setContentsMargins(0, 0, 0, 0)

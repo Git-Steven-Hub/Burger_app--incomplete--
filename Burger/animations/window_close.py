@@ -1,8 +1,9 @@
-# window_close_anim.py
+# ----- Importo las librerías necesarias ----- #
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve
 from PySide6.QtWidgets import QMainWindow
 
 class WindowCloseAnimator:
+    # ----- Tomo como valor la ventana principal ----- #
     def __init__(self, window: QMainWindow):
         self.window = window
 
@@ -13,6 +14,7 @@ class WindowCloseAnimator:
         self.anim.setEndValue(0.0)
         self.anim.setEasingCurve(QEasingCurve.InOutCubic)
 
+        # ----- Cierro la ventana después de la animación ----- #
         def close_now():
             self.window._closing = True
             self.window.close()

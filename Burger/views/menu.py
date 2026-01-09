@@ -21,22 +21,21 @@ class MenuView(QWidget):
         
         # ----- Creo el widget principal ----- #
         self.frame_titulo = QFrame()
-        self.frame_opciones= QFrame()
+        self.frame_opciones = QFrame()
         
         self.frame_titulo = BackgroundFrame()
         self.frame_titulo.setObjectName("frame_titulo")
         self.frame_opciones.setObjectName("frame_decorado")
         
-        # ----- Creo el widget principal ----- #
+        # ----- le agrego espacio a cada frame  ----- #
         root_layout.addWidget(self.frame_titulo, stretch=1)
         root_layout.addWidget(self.frame_opciones, stretch=3)
         
-        # ----- Creo el título y le asigno un nombre para el estilo ----- #
+        # ----- Creo el título y el subtitulo ----- #
         self.titulo_label = QLabel("¡MENU ENCARGADOS!\nLA BURGUESIA")
         self.titulo_label.setObjectName("titulo")
         self.titulo_label.setAlignment(Qt.AlignCenter)
         
-        # ----- Creo el subtitulo y le asigno un nombre para el estilo ----- #
         self.subtitulo_label = QLabel()
         self.subtitulo_label.setObjectName("subtitulo")
         self.subtitulo_label.setAlignment(Qt.AlignCenter)
@@ -48,9 +47,9 @@ class MenuView(QWidget):
         titulo_layout.addWidget(self.subtitulo_label)
         self.frame_titulo.setLayout(titulo_layout)
         
-        # ----- Llamo a los botones ----- #
         self._setup_buttons_layout()
     
+    # ----- Creo el evento para aplicar sombras al título y al subtitulo ----- #
     def showEvent(self, event):
         super().showEvent(event)
         if not hasattr(self, "shadows") or self.shadows is None:

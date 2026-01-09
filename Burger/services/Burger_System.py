@@ -14,14 +14,11 @@ class Sistema:
     def connect(self):
         self.connection = sqlite3.connect(self.ruta_db)
         self.cursor = self.connection.cursor()
-        # ------ Llamo a la creación de las tablas principales ------ #
         self.create()
-        # ------ Además al iniciar se crea el admin inicial ------ #
         self.admin_creation()
         
     # ------ Creo la función que crea todas las tablas principales ------ #
     def create(self):
-        # ------ Si la tabla de ventas no existe, se crea ------ #
         self.cursor.execute('''
                CREATE TABLE IF NOT EXISTS Ventas (
                     ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +34,6 @@ class Sistema:
                     Vuelto REAL
                     )
                 ''')
-        # ------ Si la tabla de registros no existe, se crea ------ #
         self.cursor.execute('''
                CREATE TABLE IF NOT EXISTS Registros (
                     ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +43,6 @@ class Sistema:
                     Caja REAL
                 )
                 ''')
-        # ------ Si la tabla de usuarios no existe, se crea ------ #
         self.cursor.execute('''
                 CREATE TABLE IF NOT EXISTS Usuarios (
                     ID INTEGER PRIMARY KEY AUTOINCREMENT,  
@@ -56,8 +51,6 @@ class Sistema:
                     Rol TEXT (20)
                 )
                 ''')
-        
-        # ------ Se guardan los cambios ------ #
         self.connection.commit()
     
     # ------ Creo la función para crear al admin ------ #
@@ -65,11 +58,8 @@ class Sistema:
         # ------ Se verifica si ya existe el admin ------ #
         self.cursor.execute("SELECT 1 FROM Usuarios WHERE Rol=?", ("admin",))
         
-        # ------ Si el admin no existe lo crea de forma básica ------ #
         if not self.cursor.fetchone():
             self.cursor.execute("INSERT INTO Usuarios (Nombre, Contraseña, Rol) VALUES (?, ?, ?)", ("admin", "admin123", "admin"))
-
-            # ------ Se guardan los cambios ------ #
             self.connection.commit()
 
     # ------ Creo la función para insertar nuevos usuarios ------ #
@@ -77,17 +67,13 @@ class Sistema:
         # ------ Verifico si el usuario ya existe ------ #
         self.cursor.execute("SELECT 1 FROM Usuarios WHERE Nombre=?", (nombre,))
         
-        # ------ Si el usuario no existe lo crea ------ #
         if self.cursor.fetchone():
             return False
         
         # ------ Lo inserta con el rol predeterminado el cual es el empleado ------ #
         self.cursor.execute("INSERT INTO Usuarios (Nombre, Contraseña, Rol) VALUES (?, ?, ?)", (nombre, contrasena, "Empleado"))
+        self.connection.commit()
         
-        # ------ Se guardan los cambios ------ #
-        self.connection.commit()  
-        
-        # ------ Se retorna verdadero para indicar que se creó correctamente ------ #
         return True
     
     # ------ Creo la función para autenticar usuarios, sea el admin o empleado ------ #
@@ -95,7 +81,6 @@ class Sistema:
         # ------ Selecciono el rol del usuario si existe ------ #
         self.cursor.execute("SELECT Rol FROM Usuarios WHERE Nombre=? AND Contraseña=?", (nombre, contrasena))
         
-        # ------ Devuelve el rol del usuario si existe ------ #
         return self.cursor.fetchone()
     
     def change_password(self, nombre, contrasena, nueva_contrasena):
@@ -105,32 +90,22 @@ class Sistema:
             return False
 
         self.cursor.execute("UPDATE Usuarios SET Contraseña=? WHERE Nombre=?", (nueva_contrasena, nombre))
-        
         self.connection.commit()
         
+    def insert_sales(self, nombre, cliente, fecha, pago, combo1, combo2, combo3, postre, total, vuelto):
+        self.cursor.execute('''INSERT INTO Ventas (Encargado, Cliente, Fecha, "Forma de pago", "Combo S", "Combo D", "Combo T", Postre, Total, Vuelto) VALUES(?,?,?,?,?,?,?,?,?,?)''', (nombre, cliente, fecha, pago, combo1, combo2, combo3, postre, total, vuelto))
+        self.connection.commit()
+
+    def register_entry(self, nombre):
+        fecha = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+        self.cursor.execute('''INSERT INTO Registros (Encargado, Fecha, "Entrada/Salida", Caja) VALUES (?,?,?,?)''', (nombre, fecha, "Entrada", 0))
+        self.connection.commit()
     
-    
-    # def insert_sales(self):
-    #     self.cursor.executemany("INSERT INTO Ventas (ID, Encargado, Cliente, Fecha, Combo_S, Combo_D, Combo_T, Postre, Total) VALUES(NULL,?,?,?,?,?,?,?,?)", [(self.encargado, self.cliente, self.fecha, self.combo1, self.combo2, self.combo3, self.postre, self.total)])
-    #     self.connection.commit()
-        
-    # def insert_register_in(self):
-    #     fecha = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-    #     self.cursor.executemany("INSERT INTO Registros (ID, Encargado, Fecha, Evento, Caja) VALUES (NULL,?,?,?,?)", [(self.encargado, fecha, "IN", "0")])
-    #     self.connection.commit()
-    
-    # def insert_register_out(self):
-    #     fecha = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-    #     self.cursor.executemany("INSERT INTO Registros (ID, Encargado, Fecha, Evento, Caja) VALUES (NULL,?,?,?,?)", [(self.encargado, fecha, "OUT", self.ingresos)])
-    #     self.connection.commit()
-    
-    # Creo el menú principal
-    def menu(self):  
-        pass
-    # Creo el método para ingresar un nuevo pedido
-    def pedido(self):
-        pass
-        
+    def registration_outside(self, nombre):
+        fecha = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+        self.cursor.execute('''INSERT INTO Registros (Encargado, Fecha, "Entrada/Salida", Caja) VALUES (?,?,?,?)''', (nombre, fecha, "Salida", 0))
+        self.connection.commit()
+
         # Creo el método para el cambio de turno
     # def cambio_turno(self):
     #     # Sumo todas las ventas del turno y las registro en el archivo de ventas
@@ -140,7 +115,6 @@ class Sistema:
     #     # Llamo al método constructor para iniciar un nuevo turno
     #     self.__init__()
     
-        # Creo el método para apagar el sistema
     def close_system(self):
         # Sumo todas las ventas del turno y las registro en el archivo de ventas
         # self.insert_register_out()

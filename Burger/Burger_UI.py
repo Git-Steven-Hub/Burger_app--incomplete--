@@ -1,4 +1,4 @@
-# Importo las librerías necesarias
+# ----- Importo las librerías necesarias ----- #
 import os, ctypes
 from PySide6.QtWidgets import QMainWindow, QStackedWidget
 from PySide6.QtGui import QIcon
@@ -30,7 +30,7 @@ class Burger(QMainWindow):
         self.stack = QStackedWidget()
         self.setCentralWidget(self.stack)       
         
-        # ----- Index 0: InicioView con frames ----- #
+        # ----- Index 0: InicioView ----- #
         self.inicio = InicioView()
         self.stack.addWidget(self.inicio)
         
@@ -56,20 +56,29 @@ class Burger(QMainWindow):
         self.setStyleSheet(estilos_boton)
         
         self.animator = WindowAnimator(self)
-        self.cls_animation = WindowCloseAnimator(self)
-        
-        
+    
+    # ----- Creo el evento para mostrar la ventana con animación ----- #
     def showEvent(self, event):
         super().showEvent(event)
         if self._first_show:
             self._first_show = False
             self.setWindowOpacity(0.0)
             QTimer.singleShot(0, self.animator.start)
-            
-    def closeEvent(self, event):
-        if self._closing:
-            return super().closeEvent(event)
         
+    # ----- Creo el título y el subtitulo ----- #
+    def closeEvent(self, event):
+        if getattr(self, "_closing", False):
+            event.accept()
+            return
+
+        if hasattr(self, "on_close") and not self.on_close():
+            event.ignore()
+            return
+
         event.ignore()
+        self.start_close_animation()
+    
+    def start_close_animation(self):
         self._closing = True
-        self.cls_animation.animate_close()
+        animator = WindowCloseAnimator(self)
+        animator.animate_close()

@@ -1,10 +1,7 @@
-# Importo las librerías necesarias
+# ----- Importo las librerías necesarias ----- #
 import sys, warnings
 from PySide6.QtWidgets import QApplication, QStyleFactory
 from PySide6.QtCore import QTranslator, QLocale, QLibraryInfo
-
-# Usar imports explícitos del paquete `Burger`.
-# Recomendado: ejecutar con `python -m Burger.Main` desde el directorio padre.
 from Burger.Burger_UI import Burger
 from Burger.services.Burger_System import Sistema
 from Burger.services.Burger_Controller import ControladorMain
@@ -22,6 +19,7 @@ if __name__ == "__main__":
     
     burger_ui.show()
     
+    # ----- Ignoro las advertencias de desuso ----- #
     warnings.filterwarnings("ignore", category=DeprecationWarning)
     translator = QTranslator()
     translator.load(
